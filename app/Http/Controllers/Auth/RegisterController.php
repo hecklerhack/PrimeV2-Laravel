@@ -14,6 +14,7 @@ use App\Educ_attainment;
 use App\Latest_Position;
 use App\Candidate;
 use App\Resume;
+use App\Links;
 
 class RegisterController extends Controller
 {
@@ -104,16 +105,22 @@ class RegisterController extends Controller
        $resume->resume_3 = 'Resume 3';
        $resume->educ_attain = $candidate->educ_attain;
        $resume->intro = '';
+       $resume->url = '';
        $resume->public_url = '';
        $resume->current_position = $candidate->position;
        $resume->save();
        
+       $links = new Links;
+       $links->user_id = $user->id;
+       $links->website = '';
+       $links->link = '';
+       $links->save();
 
        event(new Registered($user));
 
        $this->guard()->login($user);
    //    $redirect = redirect($this->redirectTo);
-       return view('dashboard')->with(['user' => $user, 'candidate' => $candidate, 'resume' => $resume]);
+       return view('dashboard')->with(['user' => $user, 'candidate' => $candidate, 'resume' => $resume, 'links' => $links]);
      //  return redirect($this->redirectTo)->with(['user' => $user, 'candidate' => $candidate]);
    //  return $this->registered($request, $user) ?: redirect($this->redirectPath());
     }

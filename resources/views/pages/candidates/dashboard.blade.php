@@ -480,11 +480,11 @@
                                     break;
                                 }
                             } save this for laters */
-                        
-                            if(!$chk){
-                                echo '<img id="display_pic" class="ui circular image" src="{{asset(\''.'candidates/images/default.jpg'.'\')}}">';
-                            }
                         ?>
+                            @if(!$chk)
+                                 <img id='display_pic' class='ui circular image' src="{{asset('candidates/images/default.jpg')}}"> 
+                            @endif
+                    
                         <button class="ui blue button" id="edit_pic"><?php echo ($chk ? "<i class='write square icon'></i>Edit" : "<i class='plus square icon'></i>Add"); ?></button>
                         @if($chk)
                             <button class="ui blue button" id="delete_pic"><i class="trash square icon"></i>Remove</button>
@@ -505,6 +505,7 @@
 							<a data-type="modal" data-for="change-pass"><strong>Change Password</strong>&nbsp;&nbsp;<i class="write square icon"></i></a>
 						</span>
                       </p>
+                      @if(Session::has('edit'))
                       <?php //if(isset($_SESSION["edit"])):
                          //$color_edit = ($_SESSION["edit"]["success"]) ? "positive" : "negative"; ?>
                       <div class="ui <?php //echo $color_edit; ?> message">
@@ -513,7 +514,9 @@
                         <p><?php //echo $_SESSION["edit"]["msg"]; ?></p>
                       </div>
                       <?php //unset($_SESSION["edit"]); ?>
+                      Session::forget('edit');
                       <?php //endif; ?>
+                      @endif
                       <div class="ui divided items">
                           <div class="item"><p class="info_cont"><i class="map pin icon"></i>
                               {{$candidate->location}}</p>
@@ -535,6 +538,7 @@
         <!-- about me section -->
             <div class="ui segment" id="resume_4">
                 <div class="ui grid">
+                    @if(Session::has('abt'))
                     <?php //if(isset($_SESSION["abt"]) && $_SESSION["abt"]["success"]): ?>
                             <!-- message from the server -->
                         <div class="row">
@@ -544,10 +548,10 @@
                                       <div class="header"><?php //echo $_SESSION["abt"]["header"]; ?></div>
                                       <p><?php //echo $_SESSION["abt"]["msg"]; ?></p>
                                     </div>
-                                    <?php //unset($_SESSION["abt"]); ?>
+                                    Session::forget('abt');
                                 </div>
                             </div>
-                          <?php //endif; ?>
+                    @endif
                           <?php $label = '' ?>
                             @if($resume->intro != '')
                                <?php $label = 'Edit' ?>
@@ -575,26 +579,30 @@
                                  /* if(strlen($user::get_info(11)) > 0){
                                       $chk_abt = true;*/
                                 ?>
+                                @if(strlen($resume->intro))
+                                    <?php $chk_abt = true; ?>
                                   <div class="item"><p><i class="file text outline icon"></i>
-                                <?php //echo $user::get_info(6); ?></p>
+                                    {{$resume->url}} </p>
                                     </div>
                                   <div class="item"><p style="font-style: italic;"><i class="quote left icon"></i>
-                                    <?php //echo $user::get_info(11); ?>
+                                    {{$resume->intro}}
                                       </p></div>
-                                <?php /*} else { 
-                                            $chk_abt = false;*/
-                                  ?>
+                                    @else
+                                       <?php $chk_abt = false ?>
                                     <div class="pop_up">
-                                    <span class="pop_up_text">This needs to be set first before you can generate a resume.</span>
+                                        <span class="pop_up_text">This needs to be set first before you can generate a resume.</span>
                                     </div>
-                                  <?php //} ?>
+                                  @endif
                               </div>
                             </div>
                           </div>
+                        </div>
+                    </div>
                            <!-- links section-->
                             <div class="ui segment">
                             <div class="ui grid">
                                 <?php //if(isset($_SESSION["link"]) && $_SESSION["link"]["success"]): ?>
+                                @if(Session::has('link'))
                                     <!-- message from the server -->
                                     <div class="row">
                                         <div class="sixteen wide column">
@@ -604,9 +612,11 @@
                                             <p><?php //echo $_SESSION["link"]["msg"]; ?></p>
                                             </div>
                                             <?php //unset($_SESSION["link"]); ?>
+                                            Session::forget('link');
                                         </div>
                                     </div>
                                 <?php //endif; ?>
+                                @endif
                                 <div class="row">
                                     <div class="eight wide column">
                                     <h2 class="ui small header">
@@ -623,16 +633,17 @@
                                 <div class="row">
                                     <div class="column">
                                     <div class="ui divided items">
+                                    @foreach($links as $link)
                                         <?php 
-                                            /*$result = $db->list_links($_SESSION['email']);
-                                            foreach($result as $row):
-                                                //Changes ex: "FaCeBoOk" into "facebook" for icon compatibility
-                                                $row[0] = str_replace(" ", "", strtolower($row[0]));*/
+                                            
+                                               // $link->website = str_replace(" ", "", strtolower($link->website));
                                         ?>
-                                        <div class="item"><p><i class="circular <?php// echo $row[0]; ?> icon"></i>
-                                        <a href="http://www.<?php //echo $row[0].".com/".$row[1]; ?>" target="_blank"><strong><?php //echo $row[1]; ?></strong></a>&nbsp;<a data-tooltip="Edit"><i class="write square icon" data-link-id="<?php //echo $row[2]; ?>"></i></a></p>
+
+                                        <div class="item"><p><i class="{{'circular '.$link->website.' icon'}}"></i>
+                                        <a href="http://www.{{$link->website}}.com/".{{$link->link}}" target="_blank"><strong><?php //echo $row[1]; ?></strong></a>&nbsp;<a data-tooltip="Edit"><i class="write square icon" data-link-id="<?php //echo $row[2]; ?>"></i></a></p>
                                         </div>
                                         <?php //endforeach; ?>
+                                    @endforeach
                                     </div>
                                     </div>
                                 </div>

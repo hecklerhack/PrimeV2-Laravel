@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Candidate;
 use App\User;
 use App\Resume;
+use App\Links;
 
 class HomeController extends Controller
 {
@@ -30,6 +31,7 @@ class HomeController extends Controller
         $candidate = Candidate::where('user_id', $user_id)->first(); 
         $user = User::find($user_id);
         $resume = Resume::where('candidate_id', $candidate->candidate_id)->first();
-        return view('pages.candidates.dashboard')->with(['user' => $user, 'candidate' => $candidate, 'resume' => $resume]);
+        $links = Links::where('user_id', $user_id);
+        return view('pages.candidates.dashboard')->with(['user' => $user, 'candidate' => $candidate, 'resume' => $resume, 'links' => $links]);
     }
 }
