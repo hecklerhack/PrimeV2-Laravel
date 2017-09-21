@@ -108,7 +108,7 @@
                                       </div>
                                 <select name="location">
                                       @foreach($locations as $location)
-                                        <option value="{{$location->city.', '.$location->province}}">{{$location->city.', '.$location->province}}</option>
+                                        <option value="{{$location->id}}">{{$location->city.', '.$location->province}}</option>
                                       @endforeach
                                 </select>
                               </div>
@@ -137,7 +137,7 @@
 						<div class="ui labeled input">
 							<select name="educ_attain">
                   @foreach($educ_attain as $educ)
-                         <option value="{{$educ->attain}}">{{$educ->educ_attain}}</option>
+                         <option value="{{$educ->id}}">{{$educ->educ_attain}}</option>
                   @endforeach
 								</select>
             </div>

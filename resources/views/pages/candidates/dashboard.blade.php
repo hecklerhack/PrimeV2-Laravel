@@ -633,17 +633,19 @@
                                 <div class="row">
                                     <div class="column">
                                     <div class="ui divided items">
-                                    @foreach($links as $link)
+                                    @forelse($links as $link)
                                         <?php 
                                             
-                                               // $link->website = str_replace(" ", "", strtolower($link->website));
+                                               $link->website = str_replace(" ", "", strtolower($link->website));
                                         ?>
 
                                         <div class="item"><p><i class="{{'circular '.$link->website.' icon'}}"></i>
-                                        <a href="http://www.{{$link->website}}.com/".{{$link->link}}" target="_blank"><strong><?php //echo $row[1]; ?></strong></a>&nbsp;<a data-tooltip="Edit"><i class="write square icon" data-link-id="<?php //echo $row[2]; ?>"></i></a></p>
+                                        <a href="{{'http://www.'.$link->website.'.com/'.$link->link.' target=_blank'}}"><strong><?php //echo $row[1]; ?>{{$link->link}}</strong></a>&nbsp;<a data-tooltip="Edit"><i class="write square icon" data-link-id="{{$link->no}}"></i></a></p>
                                         </div>
                                         <?php //endforeach; ?>
-                                    @endforeach
+                                        @empty
+                                        <p>No links yet.</p>
+                                    @endforelse
                                     </div>
                                     </div>
                                 </div>
@@ -651,6 +653,440 @@
                             </div>
                         </div>
                         <!-- column for educational & work background -->
+                        <div class="nine wide column">
+                    <!-- educational bg segment -->
+                    <div class="ui segment">
+                        <div class="ui grid">
+                            <div class="row">
+                                <div class="ten wide column">
+                                    <h2 class="ui small header">
+                                      <i class="student icon"></i>
+                                      <div class="content">
+                                        <h4>Educational Background</h4>
+                                      </div>
+                                    </h2>
+                                    <?php
+                                          /*  $result_temp = $db->list_school($_SESSION['email'], null);
+                                            $chk_educ = true;
+                                            if($result_temp->rowCount() == 0){
+                                                echo "At least one is needed to generate a resume.";
+                                                $chk_educ = false;
+                                            }*/
+                                            $chk_educ = true;
+                                        ?>
+                                        @if(count($candidate_educ) == 0)
+                                            At least one is needed to generate a resume.
+                                        @endif
+                                </div>
+                                <div class="left floated right aligned six wide column">
+                                    <a data-type="modal" data-for="add-school"><i class="add square icon"></i><strong>Add Education</strong></a>
+                                </div>
+                            </div>
+                            <?php //if(isset($_SESSION["sch"])): ?>
+                            @if(Session::has('sch'))
+                            <!-- message from the server -->
+                            <div class="row">
+                                <div class="sixteen wide column">
+                                    <div class="ui <?php //echo ($_SESSION["sch"]["success"] ? "positive" : "negative"); ?> message">
+                                      <i class="close icon"></i>
+                                      <div class="header"><?php //echo $_SESSION["sch"]["header"]; ?></div>
+                                      <p><?php //echo $_SESSION["sch"]["msg"]; ?></p>
+                                    </div>
+                                    <?php //unset($_SESSION["sch"]); ?>
+                                    Session::forget('sch');
+                                </div>
+                            </div>
+                            <?php //endif; ?>
+                            @endif
+                            <?php
+                               /* $result = $db->list_school($_SESSION["email"], null);
+                                foreach($result as $row):*/
+                            ?>
+                            @forelse($candidate_educ as $cand_ed)
+                            <div class="row">
+                                <div class="six wide column">
+                                    <strong style="padding-left: 40px;">
+                                        <?php
+                                            switch($cand_ed->level):
+                                                case "1": echo "Primary"; break;
+                                                case "2": echo "Secondary"; break;
+                                                case "3": echo "Tertiary"; break; 
+                                                case "4": echo "Graduate School"; break;
+                                                default:  echo "School"; break; 
+                                            endswitch;
+                                        ?>
+                                    </strong>
+                                </div>
+                                <div class="ten wide column">
+                                    <strong><?php //echo $row[1]; ?>{{$cand_ed->degree}}</strong>&nbsp;
+                                    <a data-tooltip="Edit"><i class="write square icon" data-id="{{$cand_ed->id}}"></i></a><br>
+                                    <?php //echo $row[2]; ?>{{$cand_ed->school}}<br>
+                                    <?php
+                                       /* $result_disp = $db->get_location();
+                                        foreach($result_disp as $row_1){
+                                            if($row_1[0] == $row[3]){
+                                                echo  $row_1[1].", ".$row_1[2];
+                                            }
+                                        }*/
+                                    ?>
+                                    {{$cand_ed->location}}
+                                    <br>
+                                    <!--<i class="marker icon"></i>&nbsp;&nbsp;<?php //echo $row[3]; ?><br>-->
+                                    <?php //endif; ?>
+                                    <?php //echo $row[4]; ?>
+                                    <?php /*$yrange = explode("-", $row[4]);
+                                                echo $yrange[0];
+                                                if($yrange[1] === date("Y")){
+                                                    echo "-present";
+                                                } else {
+                                                    echo "-".$yrange[1];
+                                                }*/
+                                        ?>
+                                    {{$cand_ed->year_entered}}
+
+                                    <?php 
+                                        if($cand_ed->year_ended == date("Y"))
+                                        {
+                                            echo "-present";
+                                        }
+                                        else{
+                                            echo "-".$cand_ed->year_ended;
+                                        }
+                                    ?>
+                                </div>
+                            </div>
+                            <?php //endforeach; ?>
+                        @empty
+                     @endforelse
+                        </div>
+                    </div>
+                    <!-- work bg segment-->
+                    <div class="ui segment">
+                        <div class="ui grid">
+                            <div class="row">
+                                <div class="ten wide column">
+                                    <h2 class="ui small header">
+                                      <i class="suitcase icon"></i>
+                                      <div class="content">
+                                        <h4>Work Experience</h4>
+                                      </div>
+                                    </h2>
+                                    <?php
+                                            /*$result_temp = $db->get_work($_SESSION['email']);
+                                            $chk_work = true;
+                                            if($result_temp->rowCount() == 0){
+                                                echo "At least one is needed to generate a resume.";
+                                                $chk_work = false;
+                                            }*/
+                                            $chk_work = true;
+                                        ?>
+                                    @if(count($candidate_exp) == 0)
+                                            At least one is needed to generate a resume.
+                                        @endif
+                                    <input type="hidden" id="count_work" value="{{count($candidate_exp)}}">
+                                </div>
+                                <div class="left floated right aligned six wide column">
+                                    <a data-type="modal" data-for="add-work"><i class="add square icon"></i><strong>Add Work Experience</strong></a>
+                                </div>
+                            </div>
+                            <?php // if(isset($_SESSION["work_edit"])): ?>
+                            @if(Session::has('work_edit'))
+                            <?php //$color = ($_SESSION["work_edit"]["success"]) ? "positive" : "negative"; ?>
+                            <!-- message from the server -->
+                            <div class="row">
+                                <div class="sixteen wide column">
+                                    <div class="ui <?php //echo $color; ?> message">
+                                      <i class="close icon"></i>
+                                      <div class="header"><?php //echo $_SESSION["work_edit"]["header"]; ?></div>
+                                      <p><?php //echo $_SESSION["work_edit"]["msg"]; ?></p>
+                                    </div>
+                                    <?php //unset($_SESSION["work_edit"]); ?>
+                            Session::forget('work_edit');
+                                </div>
+                            </div>
+                            <?php //endif; ?>
+                            @endif
+                        </div>
+                        <div class="ui grid">
+                            <?php
+                               /* $result = $db->get_work($_SESSION["email"]);
+                                foreach($result as $row):*/
+                            ?>
+                            @forelse($candidate_exp as $exp)
+                            <div class="row">
+                                <div class="six wide column" style="padding-left: 50px;">
+                                    <strong>
+                                         <?php 
+                                        $date = date_create($exp->year_entered);
+                                            echo date_format($date, 'F Y')." to<br>";
+                                        $date1 = date_create($exp->year_ended);
+                                            echo date_format($date1, 'F Y');
+                                         ?> 
+                                    </strong>
+                                </div>
+                                <div class="ten wide column">
+                                    <strong><?php //echo $row[0]; ?> {{$exp->position}}</strong>&nbsp;
+                                    <a data-tooltip="Edit"><i class="write square icon" data-work-id="<?php //echo $row[5]; ?>"></i></a><br>
+                                    <?php // echo $row[1]; ?>{{$exp->company}}<br>
+                                    <?php
+                                      /*  $result_work = $db->get_location();
+                                        foreach($result_work as $row_1){
+                                            if($row_1[0] == $row[2]){
+                                                echo  $row_1[1].", ".$row_1[2];
+                                            }
+                                        }*/
+                                    ?>
+                                    {{$exp->location}}
+                                    <?php //echo $row[2]; ?>
+                                    <p style="text-align: justify; padding-right: 10px;">
+                                        <?php //echo $row[3]; ?>
+                                        {{$exp->description}}
+                                    </p>
+                                </div>
+                            </div>
+                            <?php // endforeach; ?>
+                            @empty
+
+                            @endforelse
+                        </div>
+                    </div>
+                    
+                    <!-- achievements bg segment-->
+                    <div class="ui segment">
+                        <div class="ui grid">
+                            <div class="row">
+                                <div class="ten wide column">
+                                    <h2 class="ui small header">
+                                      <i class="trophy icon"></i>
+                                      <div class="content">
+                                        <h4>Achievements</h4>
+                                      </div>
+                                    </h2>
+                                    <?php
+                                           /* $result_temp = $db->get_candidate_achievement($_SESSION['email']);
+                                            $chk_ach = true;
+                                            if($result_temp[1]->rowCount() == 0){
+                                                echo "At least one is needed to generate a resume.";
+                                                $chk_ach = false;
+                                            }*/
+                                            $chk_ach = true;
+                                        ?>
+                                    @if(count($candidate_achieve) == 0)
+                                            At least one is needed to generate a resume.
+                                        @endif
+
+                                    <input type="hidden" id="count_ach" value="{{count($candidate_achieve)}}">
+                                </div>
+                                <div class="left floated right aligned six wide column">
+                                    <a data-type="modal" data-for="add-achievement"><i class="add square icon"></i><strong>Add Achievement</strong></a>
+                                </div>
+                            </div>
+                            <?php //if(isset($_SESSION["achieve"])): ?>
+                            @if(Session::has('achieve'))
+                            <?php //$color = ($_SESSION["achieve"]["success"]) ? "positive" : "negative"; ?>
+                            <!-- message from the server -->
+                            <div class="row">
+                                <div class="sixteen wide column">
+                                    <div class="ui <?php // echo $color; ?> message">
+                                      <i class="close icon"></i>
+                                      <div class="header"><?php // echo $_SESSION["achieve"]["header"]; ?></div>
+                                      <p><?php //echo $_SESSION["achieve"]["msg"]; ?></p>
+                                    </div>
+                                    <?php //unset($_SESSION["achieve"]); ?>
+                                    Session::forget('achieve');
+                                </div>
+                            </div>
+                            <?php //endif; ?>
+                            @endif
+                        </div>
+                        <div class="ui grid">
+                            @forelse($candidate_achieve as $cand_ach)
+                            <div class="row">
+                                <div class="six wide column" style="padding-left: 50px;">
+                                    <strong>
+                                        {{$cand_ach->year}}<!---year-->
+                                    </strong>
+                                </div>
+                                <div class="ten wide column">
+                                    <strong>{{$cand_ach->title}}</strong>&nbsp;&nbsp;<a data-tooltip="Edit"><i class="write square icon" data-ach-id="{{$cand_ach->id}}"></i></a> <!---title-->
+                                    <p style="text-align: justify; padding-right: 10px;">
+                                        {{$cand_ach->description}}
+                                    </p>
+                                </div>
+                            </div>
+                            @empty
+                            @endforelse
+                        </div>
+                    </div>
+                    <!-- memberships segment-->
+                    <div class="ui segment">
+                        <div class="ui grid">
+                            <div class="row">
+                                <div class="ten wide column">
+                                    <h2 class="ui small header">
+                                      <i class="users icon"></i>
+                                      <div class="content">
+                                        <h4>Memberships</h4>
+                                      </div>
+                                    </h2>
+                                    <?php
+                                           /* $result_temp = $db->get_candidate_membership($_SESSION['email']);
+                                            
+                                            if($result_temp[1]->rowCount() == 0){
+                                                echo "At least one is needed to generate a resume.";
+                                                $chk_mem = false;
+                                            }*/
+                                            $chk_mem = true;
+                                        ?>
+                                        @if(count($candidate_member) == 0)
+                                            At least one is needed to generate a resume.
+                                        @endif
+                                    
+                                    <input type="hidden" id="count_mem" value="<?php //echo $result_temp[1]->rowCount(); ?>">
+                                </div>
+                                <div class="left floated right aligned six wide column">
+                                    <a data-type="modal" data-for="add-membership"><i class="add square icon"></i><strong>Add Membership</strong></a>
+                                </div>
+                            </div>
+                            <!-- Romeo start -->
+                            <?php //if(isset($_SESSION["mem"])): ?>
+                            @if(Session::has('mem'))
+                            <?php //$color = ($_SESSION["mem"]["success"]) ? "positive" : "negative"; ?>
+                            <!-- message from the server -->
+                            <div class="row">
+                                <div class="sixteen wide column">
+                                    <div class="ui <?php //echo $color; ?> message">
+                                      <i class="close icon"></i>
+                                      <div class="header"><?php // echo $_SESSION["mem"]["header"]; ?></div>
+                                      <p><?php //echo $_SESSION["mem"]["msg"]; ?></p>
+                                    </div>
+                                    <?php //unset($_SESSION["mem"]); ?>
+                                    Session::forget('mem');
+                                </div>
+                            </div>
+                            @endif
+                            <!-- Romeo end -->
+                        </div>
+                        <div class="ui grid">
+                            <?php 
+                                           /* $result16 = $db->get_candidate_membership($_SESSION['email']);
+                                            foreach($result16[1] as $row16) {*/
+                                    ?>         
+                            @forelse($candidate_member as $mem)                  
+                                    
+                            <div class="row">
+                                <div class="six wide column" style="padding-left: 50px;">
+                                    <strong>
+                                        <?php echo $mem->date_entered."-";
+                                            echo ($mem->date_ended == date("Y") ? "present" : $mem->date_ended); ?><!---year-->
+                                    </strong>
+                                </div>
+                                <div class="ten wide column">
+                                    <strong>{{$mem->assoc}}</strong>&nbsp;&nbsp;<a data-tooltip="Edit"><i class="write square icon" data-mem-id="{{$mem->id}}"></i></a><!---title of membership-->
+                                    <p style="text-align: justify; padding-right: 10px;">
+                                        {{$mem->description}}
+                                    </p>
+                                </div>
+                                
+                            </div>
+                            <?php
+                                      //      }
+                                    ?>
+                                    @empty
+                            @endforelse
+                        </div>
+                    </div>
+                    <!-- skill segment -->
+                    <div class="ui segment">
+                        <div class="ui grid">
+                            <div class="row">
+                                <div class="ten wide column">
+                                    <h2 class="ui small header">
+                                      <i class="sticky note icon"></i>
+                                      <div class="content">
+                                        <h4>Skills</h4>
+                                      </div>
+                                    </h2>
+                                    <?php
+                                           // $result_temp = $db->get_skill($_SESSION['email']);
+                                            $chk_skill = true;
+                                          /*  if($result_temp->rowCount() == 0){
+                                                echo "At least one is needed to generate a resume.";
+                                                $chk_skill = false;
+                                            }*/
+                                        ?>
+                                    @if(count($candidate_skills) == 0)
+                                        At least one is needed to generate a resume.
+                                        <?php $chk_skill = false; ?>
+                                    @endif
+                                    <input type="hidden" id="count_skills" value="{{count($candidate_skills)}}">
+                                </div>
+                                <div class="left floated right aligned six wide column">
+                                    <a data-type="modal" data-for="add-skill"><i class="add square icon"></i><strong>Add Skill</strong></a>
+                                </div>
+                            </div>
+                            @if(Session::has('skl'))
+                            <?php //if(isset($_SESSION["skl"])): ?>
+                            <?php //$color = ($_SESSION["skl"]["success"]) ? "positive" : "negative"; ?>
+                            <!-- message from the server -->
+                            <div class="row">
+                                <div class="sixteen wide column">
+                                    <div class="ui <?php //echo $color; ?> message">
+                                      <i class="close icon"></i>
+                                      <div class="header"><?php //echo $_SESSION["skl"]["header"]; ?></div>
+                                      <p><?php //echo $_SESSION["skl"]["msg"]; ?></p>
+                                    </div>
+                                    <?php //unset($_SESSION["skl"]); ?>
+                                    Session::forget('skl')
+                                </div>
+                            </div>
+                            <?php //endif; ?>
+                        @endif
+                        </div>
+                        <div class="ui grid">
+                            <?php
+                               /* $result = $db->get_skill($_SESSION["email"]);
+                                foreach($result as $row): */
+                            ?>
+                            @forelse($candidate_skills as $skill)
+                            <div class="row">
+                                <div class="six wide column" style="padding-left: 50px;">
+                                    <strong id="{{'disp_skill_'.$skill->id}}">
+                                        <?php
+                                           /* switch($row[0]):
+                                                case "1": echo "Android"; break;
+                                                case "2": echo "Angular.js"; break;
+                                                case "3": echo "ASP.NET"; break; 
+                                                case "4": echo "Bootstrap"; break;
+                                                case "5": echo "C"; break;
+                                                case "6": echo "C++"; break;
+                                                case "7": echo "C#"; break;
+                                                case "8": echo "Arithmetic"; break;
+                                                case "9": echo "Classroom Management"; break;
+                                                case "10": echo "MS Office"; break;
+                                                case "11": echo "Problem Solving"; break;
+                                                case "12": echo "Presentation Skills"; break;
+                                                case "13": echo "Autocad"; break;
+                                                case "14": echo "Automotive"; break;
+                                                case "15": echo "Electrical Design"; break;
+                                                case "16": echo "Programmable Logic Control"; break;
+                                                case "17": echo "Unix"; break;
+                                                default:  echo $row[0]; break; 
+                                            endswitch;*/
+                                        ?>
+                                        {{$skill->skills}}&nbsp;<a data-tooltip="Edit"><i data-skill-id="{{$skill->id}}" class="write square icon"></i></a>
+                                        <input type="hidden" id="{{'disp_percent_'.$skill->id}}" value="{{$skill->percent}}">
+                                    </strong>
+                                </div>
+                            </div>
+                            <?php //endforeach; ?>
+                            @empty
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+                <!-- column for user's resumes -->
+
                       </div>
                     </div>
         <script src="{{asset('js/jquery.js')}}"></script>

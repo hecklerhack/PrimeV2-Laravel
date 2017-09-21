@@ -80,10 +80,15 @@ class RegisterController extends Controller
        $candidate->last_name = $request->input('last-name');
        $candidate->mobile_no = $request->input('contact');
        $candidate->tel_no = $request->input('tel');
-       $candidate->location = $request->input('location');
+      // $candidate->location = $request->input('location');
        $candidate->expected_salary = $request->input('expected_salary');
        $candidate->position = $request->input('latest_position');
-       $candidate->educ_attain = $request->input('educ_attain');
+      // $candidate->educ_attain = $request->input('educ_attain');
+
+       $location = Location::find($request->input('location'));
+       $candidate->location = $location->city.','.$location->province;
+       $educ_attain = Educ_attainment::find($request->input('educ_attain'));
+       $candidate->educ_attain = $educ_attain->educ_attain;
 
        //email and password
        $user = new User;
@@ -110,11 +115,11 @@ class RegisterController extends Controller
        $resume->current_position = $candidate->position;
        $resume->save();
        
-       $links = new Links;
+   /*    $links = new Links;
        $links->user_id = $user->id;
        $links->website = '';
        $links->link = '';
-       $links->save();
+       $links->save();*/
 
        event(new Registered($user));
 
