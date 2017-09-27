@@ -12,6 +12,8 @@ use App\Candidate_Exp;
 use App\Candidate_Achieve;
 use App\Candidate_Member;
 use App\Candidate_Skill;
+use App\Location;
+use App\Job_Category;
 
 class HomeController extends Controller
 {
@@ -42,7 +44,9 @@ class HomeController extends Controller
         $candidate_achieve = Candidate_Achieve::where('user_id', $user_id)->get();
         $candidate_member = Candidate_Member::where('user_id', $user_id)->get();
         $candidate_skills = Candidate_Skill::where('user_id', $user_id)->get();
+        $location = Location::all();
+        $job_category = Job_Category::all();
         return view('pages.candidates.dashboard')->with(['user' => $user, 'candidate' => $candidate, 'resume' => $resume, 'links' => $links, 'candidate_educ' => $candidate_educ, 'candidate_exp' => $candidate_exp,
-        'candidate_achieve' => $candidate_achieve, 'candidate_member' => $candidate_member, 'candidate_skills' => $candidate_skills]);
+        'candidate_achieve' => $candidate_achieve, 'candidate_member' => $candidate_member, 'candidate_skills' => $candidate_skills, 'location' => $location, 'job_category' => $job_category]);
     }
 }

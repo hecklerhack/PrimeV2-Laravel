@@ -369,6 +369,9 @@
                                 echo "<div class='item' data-value='".$row[0]."'>".$row[1]."</div>";
                                     }*/
                                 ?>
+                                @foreach($job_category as $job)
+                                    <div class='item' data-value="{{$job->id}}">{{$job->category}}</div>
+                                @endforeach
                           </div>
                         </div>
                         <button class="ui icon blue button">
@@ -676,24 +679,23 @@
                                         ?>
                                         @if(count($candidate_educ) == 0)
                                             At least one is needed to generate a resume.
+                                            $chk_educ = false;
                                         @endif
                                 </div>
                                 <div class="left floated right aligned six wide column">
                                     <a data-type="modal" data-for="add-school"><i class="add square icon"></i><strong>Add Education</strong></a>
                                 </div>
                             </div>
-                            <?php //if(isset($_SESSION["sch"])): ?>
                             @if(Session::has('sch'))
                             <!-- message from the server -->
                             <div class="row">
                                 <div class="sixteen wide column">
-                                    <div class="ui <?php //echo ($_SESSION["sch"]["success"] ? "positive" : "negative"); ?> message">
+                                    <div class="ui <?php session('success') ? "positive" : "negative" ?> message">
                                       <i class="close icon"></i>
-                                      <div class="header"><?php //echo $_SESSION["sch"]["header"]; ?></div>
-                                      <p><?php //echo $_SESSION["sch"]["msg"]; ?></p>
+                                      <div class="header">{{session('header')}}</div>
+                                      <p>{{session('msg')}}</p>
                                     </div>
-                                    <?php //unset($_SESSION["sch"]); ?>
-                                    Session::forget('sch');
+                                   <?php Session::forget('sch'); ?>
                                 </div>
                             </div>
                             <?php //endif; ?>
@@ -779,9 +781,11 @@
                                                 $chk_work = false;
                                             }*/
                                             $chk_work = true;
+                                    
                                         ?>
                                     @if(count($candidate_exp) == 0)
                                             At least one is needed to generate a resume.
+                                            $chk_work = false;
                                         @endif
                                     <input type="hidden" id="count_work" value="{{count($candidate_exp)}}">
                                 </div>
@@ -873,6 +877,7 @@
                                         ?>
                                     @if(count($candidate_achieve) == 0)
                                             At least one is needed to generate a resume.
+                                            $chk_ach = false;
                                         @endif
 
                                     <input type="hidden" id="count_ach" value="{{count($candidate_achieve)}}">
@@ -1086,62 +1091,1863 @@
                     </div>
                 </div>
                 <!-- column for user's resumes -->
+                <div class="three wide column">
+                    <?php /*if(isset($_SESSION["res"])):
+                         $color_resked = ($_SESSION["res"]["success"]) ? "positive" : "negative"; */?>
+                    @if(Session::has('res'))
+                      <div class="ui <?php echo $color_resked; ?> message">
+                        <i class="close icon"></i>
+                        <div class="header"><?php //echo $_SESSION["res"]["header"]; ?></div>
+                        <p id="resume_notif"><?php //echo $_SESSION["res"]["msg"]; ?></p>
+                      </div>
+                      <?php unset($_SESSION["res"]); ?>
+                      Session::forget('res');
+                      <?php //endif; ?>
+                    @endif
+                    <div class="ui raised segment">
+                        <center>
+                            <div class="block-wrap">
+                              <div class="block">
+                                <div class="left text icon">
+                                    <?php if(strpos(strtoupper($resume->public_url), "CLASSIC") !== false)
+                                    { 
+                                        echo "<button class='default_button' data-tooltip='This is your default resume and it can be viewed publicly.' disabled><i class='bullseye icon'></i></button>"; 
+                                     } 
+                                     ?>
+                                </div>
+                                <div class="right text icon">
+                                    <i class="write q icon" title="Edit Resume 1"></i>
+                                </div>
+                                <div class="textResume">
+                                    <h4 id="resume_1" title="{{$resume->resume_1}}">{{$resume->resume_1}}</h4>
+                                </div>
+                              </div>
+                            </div><br>
+                        
+                        @if($chk_educ && $chk_work && $chk_ach && $chk_mem && $chk_skill && $chk_abt)
+                          <i class="toggle on icon" onclick="openWin1()" title="Edit Visibility of Resume 1"></i>
+                          <a href="{{'Resumes/Classic%202/index.php?u='.$resume->url}}" target="_blank" style="color: black;"><i class="chevron circle right icon" title="Public View Resume 1"></i></a>
+                         @endif
+                        </center>
+                    </div>
+                    <div class="ui raised segment">
+                        <center>
+                            <div class="block-wrap">
+                              <div class="block">
+                                  <div class="left text icon">
+                                    <?php if(strpos(strtoupper($resume->public_url), "CREATIVE") !== false){ ?>
+                                      <button class="default_button" data-tooltip="This is your default resume and it can be viewed publicly." disabled><i class="bullseye icon"></i></button><?php } ?>
+                                  </div>
+                                <div class="right text icon">
+                                    <i class="write icon" title="Edit Resume 2"></i>
+                                </div>
+                                <div class="textResume">
+                                    <h4 id="resume_2" title="{{$resume->resume_2}}">{{$resume->resume_2}}</h4>
+                                </div>
+                              </div>
+                            </div><br>
+                            
+                        <i class="camera icon" title="View photos"></i>
+                        <i class="record icon" title="View videos"></i>
+                          <?php if($chk_educ && $chk_work && $chk_ach && $chk_mem && $chk_skill && $chk_abt){ ?>
+                          <i class="toggle on icon" onclick="openWin2()" title="Edit Visibility of Resume 2"></i>
+                          <a href="{{'Resumes/Creative2/creative.php?u='.$resume->url}}" target="_blank" style="color: black;"><i class="chevron circle right icon" title="Public View Resume 2"></i></a>
+                          <?php } ?>
+                        </center>
+                    </div>
+                    <div class="ui raised segment">
+                        <center>
+                            <div class="block-wrap">
+                              <div class="block">
+                                <div class="left text icon">
+                                    <?php if(strpos(strtoupper($resume->public_url), "EXECUTIVE") !== false){ ?>
+                                      <button class="default_button" data-tooltip="This is your default resume and it can be viewed publicly." disabled><i class="bullseye icon"></i></button><?php } ?>
+                                </div>
+                                <div class="right text icon">
+                                    <i class="write icon" title="Edit Resume 3"></i>
+                                </div>
+                                <div class="textResume">
+                                    <h4 id="resume_3" title="{{$resume->reume_3}}">{{$resume->resume_3}}</h4>
+                                </div>
+                              </div>
+                            </div><br>
+                          <?php if($chk_educ && $chk_work && $chk_ach && $chk_mem && $chk_skill && $chk_abt){ ?>
+                          <i class="toggle on icon" onclick="openWin3()" title="Edit Visibility of Resume 3"></i>
+                          <a href="{{'Resumes/Executive/index.php?u='.$resume->url}}" target="_blank" style="color: black;"><i class="chevron circle right icon" title="Public View Resume 3"></i></a>
+                          <?php } ?>
+                        </center>
+                    </div>
+                </div>
+                <!-- pop-up windows -->
+                <!-- pop-up window for editing user info -->
 
+                <!--nothing yet, will add later-->
+                <!-- pop-up window for adding school -->
+                <div class="ui modal" data-for="add-school">
+                  <div class="header">Add Education</div>
+                  <div class="content">
+                    <form class="ui form educ" data-for="add-school" method="post" action="educ" id="add-school-form">
+                      <input type="hidden" name="request" value="add-school">
+                       {{ csrf_field() }}
+                      
+                      <div class="field">
+                          <label>Education Level</label>
+                          <div class="ui fluid search selection dropdown" id="sch-level-add">
+                          <input type="hidden" name="level">
+                          <i class="dropdown icon"></i>
+                          <div class="default text">Education Level</i></div>
+                          <div class="menu">
+                            <div class="item" data-value="1">Primary</div>
+                            <div class="item" data-value="2">Secondary</div>
+                            <div class="item" data-value="3">Tertiary</div>
+                            <div class="item" data-value="4">Graduate School</div>
+                          </div>
+                        </div>
+                        </div>
+                      
+                      
+                      <div class="field">
+                        <label>School</label>
+                        <input type="text" name="name" placeholder = "Your school" maxlength="70">
+                      </div>
+                      
+                      <div class="field" id="school-field" style="display: none;">
+                          <label>Field of Study</label>
+                          <div class="ui fluid search selection dropdown">
+                          <input type="hidden" name="field">
+                          <i class="dropdown icon"></i>
+                          <div class="default text">Field of Study</i></div>
+                          <div class="menu">
+                             @foreach($job_category as $job)
+                                    <div class='item' data-value="{{$job->id}}">{{$job->category}}</div>
+                                @endforeach
+                            </div>
+                          </div>
+                        </div>
+                        
+                      
+                      <div class="field">
+                          <label>Location</label>
+                          <div class="ui fluid search selection dropdown">
+                          <input type="hidden" name="location">
+                          <i class="dropdown icon"></i>
+                          <div class="default text">School Location</i></div>
+                          <div class="menu">
+                            <?php
+                               /* $result_loc = $db->get_location();
+                                foreach($result_loc as $row){ */?>
+                            @foreach($location as $loc)
+                                <div class="item" data-value="{{$loc->city.','.$loc->province}}">{{$loc->city.','.$loc->province}}</div>
+                            <?php // } ?>
+                            @endforeach
+                          </div>
+                        </div>
+                        </div>
+                      <div class="two fields">
+                          <div class="field">
+                            <label> From </label>
+                            <div id="sch-to-add">
+                              <input type="date" name="from">
+                            </div>
+                          </div> 
+                          <div class="field">
+                            <label> To </label>
+                            <div id="sch-to-add">
+                              <input type="date" name="to">
+                            </div>
+                          </div> 
+                    </div>
+                      
+                      
+                      <div class="field">
+                        <label>Degree</label>
+                        <input type="text" name="degree" placeholder="Degree taken" maxlength="70">
+                      </div>  
+                      <input type="hidden" name="user_id" value="{{$user->id}}">
+                      <button class="ui green button" type="submit" style="float: right;">Add</button>
+                      <button class="ui blue button" type="button" id="cancel_add_sch">Cancel</button>
+                    </form>
+                  </div>
+                </div>
+                
+                 <!-- pop-up window for adding work background -->
                       </div>
                     </div>
         <script src="{{asset('js/jquery.js')}}"></script>
         <script src="{{asset('semantic/dist/semantic.js')}}"></script>
 
 <script>
+        
+            function verify_form(data){
+                alert($("form[data-for='"+data+"']").valid());
+                return false;
+            }
+        
+            function view_msg(elt){
+                document.getElementById("employer_msg").value = elt.value;
+                $(".ui.modal.view_msg").modal("show");
+            }
+            
+            function change_length(char_count, text_area, size){
+                document.getElementById(char_count).innerHTML = (size-document.getElementById(text_area).value.length);
+            }
+            
+            function change_skill_rate(myValue, output){
+                document.getElementById(output).innerHTML = myValue + "%";
+            }
+        
+            function sort_table(table_name, sort_op){
+                var sort_order = parseInt($(this).attr("data-status"));
 
-    function check_hash() {
-      //Checks for hash/es in the url.
-      var url = window.location.hash.slice(1);
-        if(url) 
-        {
-            $("a[data-tab]").removeClass("active");
-            $("a[href='#"+url+"']").addClass("active");
-            $("div[data-tab]").addClass("hide");
-            $("div[data-tab='"+$("a[href='#"+url+"']").attr("data-tab")+"']").removeClass("hide");
+                if(sort_order) {
+                    $(this).attr("data-status", "0");
+                } else {
+                    $(this).attr("data-status", "1");
+                }
+                
+                var table, tr, td, i, j;
+                table = document.getElementById(table_name);
+                tr = table.getElementsByTagName("tr");
+                
+                var arr = new Array(tr.length);
+                var arr_td = new Array(tr.length-1);
+                for (i = 0; i < tr.length; i++) {
+                    td = tr[i].getElementsByTagName("td")[sort_op];
+                      if(td){
+                          arr[i-1] = td.innerHTML;
+                          arr_td[i-1] = tr[i];
+                      }
+                }
+                
+                for (i = 1; i < tr.length; i++) {
+                    table.deleteRow(i);
+                    i = 0;
+                }
+                
+                
+                for (i = 0; i < arr.length; i++) {
+                    for (j = 0; j < (arr.length - i - 1); j++) {
+                        if(arr[j] == undefined || arr[j+1] == undefined){
+                            break;
+                        }
                         
-            var data_content = $("a[href='#"+url+"']").attr("data-tab");
-            $("div[data-tab]").hide();
-            $("div[data-tab='"+data_content+"']").show();
-        }
-    }          
-          
-    function change_tab(click){
-        $("a[data-tab]").removeClass("active");
+                        if(sort_order){
+                            if(arr[j].localeCompare(arr[j+1]) == 1) {
+                                var tmp = arr[j];
+                                arr[j] = arr[j+1];
+                                arr[j+1] = tmp;
 
-        if(!$(click).hasClass("active"))
-        $(click).addClass("active");
+                                var tmp_2 = arr_td[j];
+                                arr_td[j] = arr_td[j+1];
+                                arr_td[j+1] = tmp_2;
+                            }
+                        } else {
+                            if(arr[j].localeCompare(arr[j+1]) == -1) {
+                                var tmp = arr[j];
+                                arr[j] = arr[j+1];
+                                arr[j+1] = tmp;
+
+                                var tmp_2 = arr_td[j];
+                                arr_td[j] = arr_td[j+1];
+                                arr_td[j+1] = tmp_2;
+                            }
+                        }
+                    }        
+                }
+                
+                for (i = 1; i < arr_td.length+1; i++) {
+                    var row = table.insertRow(i);
+                    var temp = arr_td[i-1].getElementsByTagName("td");
+                    for(var j = 0; j < temp.length; j++){
+                        var cell = row.insertCell(j);
+                        cell.innerHTML = temp[j].innerHTML;
+                        if(j == 3 && table_name == "app_table"){
+                            /*if(cell.innerHTML === "Shortlisted" || cell.innerHTML === "Reviewed") {
+                                cell.style.backgroundColor = "#bfe5fc";
+                            } else */if(cell.innerHTML.indexOf("Invited") > -1) {
+                                //cell.style.backgroundColor = "#c9f2c9";
+                                cell.style.backgroundColor = "#00ea2b";
+                            }/* else {
+                                cell.style.backgroundColor = "#ef9b9b";
+                            }*/
+                            //cell.style.backgroundColor = "#E8F5E9";
+                        }
+                    }
+                }
+            }
+            
+            function edit_school_form(){
+                //Sets school name upon deletion
+                $("#sch-name").html($(this).parent().parent().find("strong").html());
+                $("form[name='del-sch'] > input[name='name']").val($(this).parent().parent().find("strong").html());
+                //Sets id of the selected school
+                $("form[name='del-sch'] > input[name='id']").val($(this).attr("data-id"));
+                //Sets form values/
+                
+                $.ajax({
+                    type: "post",
+                    url: "db.php",
+                    data: {"request" : "get-school", "id" : $(this).attr("data-id")},
+                    dataType: "json"
+                }).done(function(data){
+                    if(data){
+                        for(var key in data){
+                            if(data.hasOwnProperty(key)){
+                                if(key === "school") $("input[data-name='name']").val(data[key]);
+                                else if(key === "location"){
+                                    $("input[data-name='sch-loc']").val(data[key]);
+                                    $("#sch-loc").dropdown('set selected', data[key]);
+                                } 
+                                else if(key === "degree") $("input[data-name='degree']").val(data[key]);
+                                else if(key === "level")
+                                {
+                                    $("input[data-name='sch-level']").val(data[key]);
+                                    $("#sch-level").dropdown('set selected', data[key]);
+                                
+                                    
+                                    if(data[key] >= 3){
+                                        document.getElementById("school-field-edit").style.display = "inline";
+                                        $('.ui.form.educ').form('destroy');
+                                        $(".ui.form.educ").form({
+                                           inline: true,
+                                            fields: {
+                                                level: {
+                                                identifier: 'level',
+                                                rules: [
+                                                  {
+                                                    type   : 'empty',
+                                                    prompt : 'Field required.'
+                                                  }    
+                                                ]},
+                                                name: {
+                                                identifier: 'name',
+                                                rules: [
+                                                  {
+                                                    type   : 'empty',
+                                                    prompt : 'Field required.'
+                                                  }    
+                                                ]},
+                                                field: {
+                                                identifier: 'field',
+                                                rules: [
+                                                  {
+                                                    type   : 'empty',
+                                                    prompt : 'Field required.'
+                                                  }    
+                                                ]},
+                                                loc: {
+                                                identifier: 'location',
+                                                rules: [
+                                                  {
+                                                    type   : 'empty',
+                                                    prompt : 'Field required.'
+                                                  }    
+                                                ]},
+                                                
+                                                from: {
+                                                identifier: 'from',
+                                                rules: [
+                                                  {
+                                                    type   : 'empty',
+                                                    prompt : 'Field required.'
+                                                  },
+                                                  {
+                                                      type : "checkYear[sch-from]",
+                                                      prompt : 'Year entered must be less than year ended.'
+                                                  }  
+                                                ]},
+                                                to: {
+                                                identifier: 'to',
+                                                rules: [
+                                                  {
+                                                    type   : 'empty',
+                                                    prompt : 'Field required.'
+                                                  },
+                                                  {
+                                                      type : "checkYear[sch-to]",
+                                                      prompt : 'Year ended must be greater than year entered.'
+                                                  }
+                                                ]},
+                                                degree: {
+                                                identifier: 'degree',
+                                                rules: [
+                                                  {
+                                                    type   : 'empty',
+                                                    prompt : 'Field required.'
+                                                  }    
+                                                ]}
+                                            } 
+                                        });
+                                        
+                                    } else {
+                                        document.getElementById("school-field-edit").style.display = "none";
+                                        $('.ui.form.educ').form('destroy');
+                                        $(".ui.form.educ").form({
+                                           inline: true,
+                                            fields: {
+                                                level: {
+                                                identifier: 'level',
+                                                rules: [
+                                                  {
+                                                    type   : 'empty',
+                                                    prompt : 'Field required.'
+                                                  }    
+                                                ]},
+                                                name: {
+                                                identifier: 'name',
+                                                rules: [
+                                                  {
+                                                    type   : 'empty',
+                                                    prompt : 'Field required.'
+                                                  }    
+                                                ]},
+                                                field: {
+                                                identifier: 'field',
+                                                rules: [
+                                                  {
+                                                    type   : 'notRequired[0]',
+                                                    prompt : 'Field required.'
+                                                  }    
+                                                ]},
+                                                loc: {
+                                                identifier: 'location',
+                                                rules: [
+                                                  {
+                                                    type   : 'empty',
+                                                    prompt : 'Field required.'
+                                                  }    
+                                                ]},
+                                               
+                                                from: {
+                                                identifier: 'from',
+                                                rules: [
+                                                  {
+                                                    type   : 'empty',
+                                                    prompt : 'Field required.'
+                                                  },
+                                                  {
+                                                      type : "checkYear[sch-from]",
+                                                      prompt : 'Year entered must be less than year ended.'
+                                                  }  
+                                                ]},
+                                                to: {
+                                                identifier: 'to',
+                                                rules: [
+                                                  {
+                                                    type   : 'empty',
+                                                    prompt : 'Field required.'
+                                                  },
+                                                  {
+                                                      type : "checkYear[sch-to]",
+                                                      prompt : 'Year ended must be greater than year entered.'
+                                                  }
+                                                ]},
+                                                degree: {
+                                                identifier: 'degree',
+                                                rules: [
+                                                  {
+                                                    type   : 'empty',
+                                                    prompt : 'Field required.'
+                                                  }    
+                                                ]}
+                                            } 
+                                        });
+                                        
+                                    }
+                                }
+                                else if(key === "no") $("input[data-name='no']").val(data[key]);
+                                else if(key === "year") {
+                                    $("input[data-name='sch-from']").val(data[key].split(" to ")[0]);
+                                 //   $("input[data-name='sch-from']").val(data[key]);
+                                    $("#sch-from").dropdown('set selected', data[key].split("-")[0]);
+                                    
+                                    $("input[data-name='sch-to']").val(data[key].split(" to ")[1]);
+                                    $("#sch-to").dropdown('set selected', data[key].split("-")[1]);
+                                } 
+                                else if(key === "field_of_study"){
+                                    $("input[data-name='sch-field']").val(data[key]);
+                                    $("#sch-field").dropdown('set selected', data[key]);
+                                }
+                            }
+                        }
+                    }
+                });
+                //Show form
+                $("div[data-for='edit-school']").modal({
+                    onShow : function(){
+                        $("#modal-check").val('1');
+                    },
+                    onHide : function(){
+                        $("#modal-check").val('0');
+                    }
+                    }).modal("show");
+                
+                document.getElementById("edit-sch-id").value =  $(this).attr("data-id");
+            }
+            
+            function edit_work_form(){
+                //Specifies the unique work # upon editing
+                $("div[data-for='edit-work'] > div.content > form > input[data-name='no']").val($(this).attr("data-work-id"));
+                //Gets work info
+                $("#work-name").html($(this).parent().parent().find("strong").html());
+                $("form[name='del-work'] > input[name='name_work']").val($(this).parent().parent().find("strong").html());
+                //Sets id of the selected school
+                $("form[name='del-work'] > input[name='id_work']").val($(this).attr("data-work-id"));
+                
+                $.ajax({
+                    type: "post",
+                    url: "db.php",
+                    data: {"request" : "get-work", "id" : $(this).attr("data-work-id")},
+                    dataType: "json"
+                }).done(function(data){
+                    if(data){
+                        for(var key in data){
+                            if(data.hasOwnProperty(key)){
+                                if(key === "company") $("input[data-name='c-name']").val(data[key]);
+                                else if(key === "position") {
+                                    $("input[data-name='c-pos']").val(data[key]);
+                                }
+                                else if(key === "from") {
+                                    $("input[data-name='c-from']").val(data[key]);
+                                }
+                                else if(key === "to") {
+                                    $("input[data-name='c-to']").val(data[key]);
+                                }
+                                else if(key === "location"){
+                                    $("input[data-name='work-loc']").val(data[key]);
+                                    $("#work-loc").dropdown('set selected', data[key]);
+                                }
+                                else if(key === "year_ended"){ 
+                                    $("input[data-name='work-to']").val(data[key]);
+                                    $("#work-to").dropdown('set selected', data[key]);
+                                }
+                                else if(key === "year_entered"){
+                                    $("input[data-name='work-from']").val(data[key]);
+                                    $("#work-from").dropdown('set selected', data[key]);
+                                } else if(key === "industry"){
+                                    $("input[data-name='work-ind']").val(data[key]);
+                                    $("#work-ind").dropdown('set selected', data[key]);
+                                } else if(key === "position"){
+                                    $("input[data-name='work-pos']").val(data[key]);
+                                    $("#work-pos").dropdown('set selected', data[key]);
+                                } else if(key === "field_of_study"){
+                                    $("input[data-name='work-field']").val(data[key]);
+                                    $("#work-field").dropdown('set selected', data[key]);
+                                } 
+                                else if(key === "description") $("textarea[data-name='c-des']").val(data[key]);
+                                else if(key === "position") $("input[data-name='c-pos']").val(data[key]);
+                            }
+                        }
+                    }
+                });
+                //Shows edit form
+                $("div[data-for='edit-work']").modal({
+                    onShow : function(){
+                        $("#modal-check").val('1');
+                    },
+                    onHide : function(){
+                        $("#modal-check").val('0');
+                    }
+                    }).modal("show");
+                
+                document.getElementById("edit-work-id").value = $(this).attr("data-work-id");
+            }
+            
+            function edit_skill_form(){
+                
+                var id = $(this).attr("data-skill-id");
+                $("div[data-for='edit-skill'] > div.content > form > input[data-name='no']").val($(this).attr("data-skill-id"));
+                $("#skill-name").html(document.getElementById("disp_skill_"+id).innerText.substr(0, document.getElementById("disp_skill_"+id).innerText.length-1));
+                
+                /*
+                $.ajax({
+                    type: "post",
+                    url: "db.php",
+                    data: {"request" : "get-skill", "id" : $(this).attr("data-skill-id")},
+                    dataType: "json"
+                }).done(function(data){
+                    if(data){
+                        for(var key in data){
+                            alert(key + " : " + data[key]);
+                            if(data.hasOwnProperty(key)){
+                                //if(key === "skill") $("input[data-name='s-name']").val(data[key]);
+                            }
+                        }
+                    }
+                });*/
+                //Shows edit form
+                $("input[data-name='s-name']").val(document.getElementById("disp_skill_"+id).innerText.substr(0, document.getElementById("disp_skill_"+id).innerText.length-1));
+                $("form[name='del-skill'] > input[name='name_skill']").val(document.getElementById("disp_skill_"+id).innerText);
+                //Sets id of the selected school
+                $("form[name='del-skill'] > input[name='id_skill']").val(id);
+                
+                document.getElementById("currentValue_edit").innerHTML = document.getElementById("disp_percent_"+id).value+"%";
+                document.getElementById("skill_rate_edit").value = document.getElementById("disp_percent_"+id).value;
+                
+                $("div[data-for='edit-skill']").modal("show"); 
+                
+                /*var id = $(this).attr("data-skill-id");
+                $("#skill-name").html(document.getElementById("disp_skill_"+id).innerText);
+                $("form[name='del-skill'] > input[name='name_skill']").val(document.getElementById("disp_skill_"+id).innerText);
+                //Sets id of the selected school
+                $("form[name='del-skill'] > input[name='id_skill']").val(id);
+                
+                $(".ui.modal.skill_edit").modal("show");
+                /*
+                document.getElementById("currentValue").innerHTML = "0%";
+                    document.getElementById("skill_rate").value = 0;
+                    document.getElementById("sel_skill").innerText = skill.toUpperCase();
+                */
+                /*document.getElementById("currentValue_edit").innerHTML = document.getElementById("disp_percent_"+id).value+"%";
+                document.getElementById("skill_rate_edit").value = document.getElementById("disp_percent_"+id).value;
+                document.getElementById("sel_skill_edit").innerText = document.getElementById("disp_skill_"+id).innerText;
+                
+                $("#confirm_skill_edit").on("click", function(){
+                    var percent = document.getElementById("skill_rate_edit").value;
+                    document.getElementById("skill_percent_edit").value = percent;
+                    document.getElementById("skill_id").value = id;
+                    document.getElementById("update-skill").submit();
+                });*/
+                
+            }
+            
+            // Romeo start
+            function edit_mem_form(){
+                $("div[data-for='edit-membership'] > div.content > form > input[data-name='no']").val($(this).attr("data-mem-id"));
+                
+                $("#mem-name").html($(this).parent().parent().find("strong").html());
+                $("form[name='del-mem'] > input[name='name']").val($(this).parent().parent().find("strong").html());
+                //Sets id of the selected school
+                $("form[name='del-mem'] > input[name='id']").val($(this).attr("data-mem-id"));
+                
+                $.ajax({
+                    type: "post",
+                    url: "db.php",
+                    data: {"request" : "get-membership", "id" : $(this).attr("data-mem-id")},
+                    dataType: "json"
+                }).done(function(data){
+                    if(data){
+                        for(var key in data){
+                            if(data.hasOwnProperty(key)){
+                                //alert(key + " : " + data[key]);
+                                //if(key === "skill") $("input[data-name='s-name']").val(data[key]);
+                                if(key === "assoc") $("input[data-name='mem_assoc']").val(data[key]);
+                                else if(key === "description") $("textarea[data-name='mem_des']").val(data[key]);
+                                else if(key === "date_entered"){
+                                    $("input[data-name='mem-from']").val(data[key]);
+                                    $("#mem-from").dropdown('set selected', data[key]);
+                                }
+                                else if(key === "date_ended"){
+                                    $("input[data-name='mem-to']").val(data[key]);
+                                    $("#mem-to").dropdown('set selected', data[key]);
+                                }
+                            }
+                        }
+                    }
+                });
+                //Shows edit form
+                $("div[data-for='edit-membership']").modal({
+                    onShow : function(){
+                        $("#modal-check").val('1');
+                    },
+                    onHide : function(){
+                        $("#modal-check").val('0');
+                    }
+                    }).modal("show");   
+            }
+            
+            
+            function edit_ach_form(){
+                $("div[data-for='edit-achievement'] > div.content > form > input[data-name='no']").val($(this).attr("data-ach-id"));
+                
+                $("#ach-name").html($(this).parent().parent().find("strong").html());
+                $("form[name='del-ach'] > input[name='name']").val($(this).parent().parent().find("strong").html());
+                //Sets id of the selected school
+                $("form[name='del-ach'] > input[name='id']").val($(this).attr("data-ach-id"));
+                
+                $.ajax({
+                    type: "post",
+                    url: "db.php",
+                    data: {"request" : "get-achievement", "id" : $(this).attr("data-ach-id")},
+                    dataType: "json"
+                }).done(function(data){
+                    if(data){
+                        for(var key in data){
+                            if(data.hasOwnProperty(key)){
+                                //if(key === "skill") $("input[data-name='s-name']").val(data[key]);
+                                if(key === "year"){
+                                    $("input[data-name='ach-year']").val(data[key]);
+                                    $("#ach-year").dropdown('set selected', data[key]);
+                                }
+                                else if(key === "description") $("textarea[data-name='ach_des']").val(data[key]);
+                                else if(key === "title")$("input[data-name='ach_title']").val(data[key]);
+                            }
+                        }
+                    }
+                });
+                //Shows edit form
+                $("div[data-for='edit-achievement']").modal("show");   
+            }
+            
+            function edit_link_form(){
+                $("div[data-for='edit-link'] > div.content > form > input[data-name='no']").val($(this).attr("data-link-id"));
+                
+                $("#link-url").html($(this).parent().parent().find("strong").html());
+                //alert($(this).html());
+                //$("form[name='del-link'] > input[name='name']").val($(this).parent().parent().find("strong").html());
+                //Sets id of the selected school
+                $("form[name='del-link'] > input[name='id']").val($(this).attr("data-link-id"));
+                
+                $.ajax({
+                    type: "post",
+                    url: "db.php",
+                    data: {"request" : "get-link", "id" : $(this).attr("data-link-id")},
+                    dataType: "json"
+                }).done(function(data){
+                    if(data){
+                        for(var key in data){
+                            if(data.hasOwnProperty(key)){
+                                //if(key === "skill") $("input[data-name='s-name']").val(data[key]);
+                                if(key === "website"){
+                                     $("input[data-name='link_web']").val(data[key]);
+                                     $("#link_web").dropdown('set selected', data[key]);
+                                }
+                                else if(key === "link") $("input[data-name='link_url']").val(data[key]);
+                            }
+                        }
+                    }
+                });
+                //Shows edit form
+                $("div[data-for='edit-link']").modal("show");   
+            }
+            
+            function myFunction() {
+                
+                // Declare variables
+                var input, filter, ul, li, a, i;
+                input = document.getElementById('myInput');
+                filter = input.value.toUpperCase();
+                ul = document.getElementById("myUL");
+                li = ul.getElementsByTagName('li');
+
+                // Loop through all list items, and hide those who don't match the search query
+                for (i = 0; i < li.length; i++) {
+                     a = li[i].getElementsByTagName("a")[0];
+                     if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                         li[i].style.display = "";
+                     }
+                     
+                     else {
+                         li[i].style.display = "none";
+                     }
+                }
+            }
+            
+            function openWin1() {
+                window.open("Resumes/Classic%202/index.php");
+            }
+            
+            function openWin2() {
+                window.open("Resumes/Creative2/creative.php");
+            }
+            
+            function openWin3() {
+                window.open("Resumes/Executive/index.php");
+            }
+            
+             function check_hash() {
+                //Checks for hash/es in the url.
+                var url = window.location.hash.slice(1);
+                if(url) {
+                    $("a[data-tab]").removeClass("active");
+                    $("a[href='#"+url+"']").addClass("active");
+                    $("div[data-tab]").addClass("hide");
+                    $("div[data-tab='"+$("a[href='#"+url+"']").attr("data-tab")+"']").removeClass("hide");
+                    
+                    var data_content = $("a[href='#"+url+"']").attr("data-tab");
+                    $("div[data-tab]").hide();
+                    $("div[data-tab='"+data_content+"']").show();
+                }
+            }
+            
+            function change_tab(click){
+                $("a[data-tab]").removeClass("active");
+
+                if(!$(click).hasClass("active"))
+                    $(click).addClass("active");
 
                 //Displays content depending on the selected tab
-        var data_content = $(click).attr("data-tab");
-        $("div[data-tab]").hide();
-        $("div[data-tab='"+data_content+"']").show();
-    }
-    $(".ui.dropdown").dropdown();
-    check_hash();
-    $("a[data-tab]").on("click", function(){
-            change_tab(this);
-    });
-     $("#profile").on("click", function(){
-       window.location.href = "dashboard.php#profile";
-        $("a[data-tab='2']").click();
-    });
-
-    /*$(document).ready(function(){
-                $("[data-content]").popup({on: 'click'});
+                var data_content = $(click).attr("data-tab");
+                $("div[data-tab]").hide();
+                $("div[data-tab='"+data_content+"']").show();
+            }
+            
+            function display_creative_pic(image){
+                document.getElementById("display_pic_creative").src = image;
+                $("div[data-for='view_pic']").modal("hide");
+                $("div[data-for='view_pic']").modal("show");
+            }
+            
+            function display_creative_video(video){
+                document.getElementById("display_video_creative").src = video;
+                $("div[data-for='view_vid']").modal("hide");
+                $("div[data-for='view_vid']").modal("show");
+            }
+            
+            function delete_display_creative(content){
+                document.getElementById("delete_msg").innerText = "Do you want to delete this "+content+"?";
+                $(".ui.modal.delete").modal("show");
+                $("#confirm_delete").on("click", function(){
+                    var src = document.getElementById("display_"+content+"_creative").getAttribute("src");
+                    $.ajax({
+                        type: "post",    
+                        url: "db.php",
+                        data: {request: "delete-"+content+"-creative", src: src}
+                    }).done(function(data) {
+                        window.location.reload();
+                        window.location.href = "dashboard.php#profile";
+                    });
+                });
+            }
+            
+            $(document).ready(function(){
+                
+                //7/25/17 change    /
+             $('button#apply').on("click", function(){
+             $('.ui.modal.apply').modal('show')
+            });
+                //7/25/17 change end
+                
+                $("#reset").on("click", function(){
+                     window.location.href = "index.php";
+                });
+                
+                $("#resetModal").on("click", function(){
+                    window.location.href = "index.php?reset=1";
+                });
+                
                 $(".ui.dropdown").dropdown();
+                check_hash();
+                $("a[data-tab]").on("click", function(){
+                    change_tab(this);
+                });
+                
+                
+                $("#sch-level-add").dropdown({
+                    onChange : function(val){
+                        if(val >= 3){
+                            document.getElementById("school-field").style.display = "inline";
+                            $('.ui.form.educ').form('destroy');
+                            $(".ui.form.educ").form({
+                                fields: {
+                                    level: {
+                                    identifier: 'level',
+                                    rules: [
+                                      {
+                                        type   : 'empty',
+                                        prompt : 'Field required.'
+                                      }    
+                                    ]},
+                                    name: {
+                                    identifier: 'name',
+                                    rules: [
+                                      {
+                                        type   : 'empty',
+                                        prompt : 'Field required.'
+                                      }    
+                                    ]},
+                                    field: {
+                                    identifier: 'field',
+                                    rules: [
+                                      {
+                                        type   : 'empty',
+                                        prompt : 'Field required.'
+                                      }    
+                                    ]},
+                                    loc: {
+                                    identifier: 'location',
+                                    rules: [
+                                      {
+                                        type   : 'empty',
+                                        prompt : 'Field required.'
+                                      }    
+                                    ]},
+                                    
+                                    from: {
+                                    identifier: 'from',
+                                    rules: [
+                                      {
+                                        type   : 'empty',
+                                        prompt : 'Field required.'
+                                      },
+                                      {
+                                          type : "checkYear[sch-from]",
+                                          prompt : 'Year entered must be less than year ended.'
+                                      }  
+                                    ]},
+                                    to: {
+                                    identifier: 'to',
+                                    rules: [
+                                      {
+                                        type   : 'empty',
+                                        prompt : 'Field required.'
+                                      },
+                                      {
+                                          type : "checkYear[sch-to]",
+                                          prompt : 'Year ended must be greater than year entered.'
+                                      }
+                                    ]},
+                                    degree: {
+                                    identifier: 'degree',
+                                    rules: [
+                                      {
+                                        type   : 'empty',
+                                        prompt : 'Field required.'
+                                      }    
+                                    ]}
+                                } 
+                            });
+            
+                        } else {
+                            document.getElementById("school-field").style.display = "none";
+                            $('.ui.form.educ').form('destroy');
+                            $(".ui.form.educ").form({
+                                fields: {
+                                    level: {
+                                    identifier: 'level',
+                                    rules: [
+                                      {
+                                        type   : 'empty',
+                                        prompt : 'Field required.'
+                                      }    
+                                    ]},
+                                    name: {
+                                    identifier: 'name',
+                                    rules: [
+                                      {
+                                        type   : 'empty',
+                                        prompt : 'Field required.'
+                                      }    
+                                    ]},
+                                    field: {
+                                    identifier: 'field',
+                                    rules: [
+                                      {
+                                        type   : 'notRequired[0]',
+                                        prompt : 'Field required.'
+                                      }    
+                                    ]},
+                                    loc: {
+                                    identifier: 'location',
+                                    rules: [
+                                      {
+                                        type   : 'empty',
+                                        prompt : 'Field required.'
+                                      }    
+                                    ]},
+                                    
+                                    from: {
+                                    identifier: 'from',
+                                    rules: [
+                                      {
+                                        type   : 'empty',
+                                        prompt : 'Field required.'
+                                      },
+                                      {
+                                          type : "checkYear[sch-from]",
+                                          prompt : 'Year entered must be less than year ended.'
+                                      }  
+                                    ]},
+                                    to: {
+                                    identifier: 'to',
+                                    rules: [
+                                      {
+                                        type   : 'empty',
+                                        prompt : 'Field required.'
+                                      },
+                                      {
+                                          type : "checkYear[sch-to]",
+                                          prompt : 'Year ended must be greater than year entered.'
+                                      }
+                                    ]},
+                                    degree: {
+                                    identifier: 'degree',
+                                    rules: [
+                                      {
+                                        type   : 'empty',
+                                        prompt : 'Field required.'
+                                      }    
+                                    ]}
+                                } 
+                            });
+                        }
+                    }
+                });
+                
+                $("#sch-level").dropdown({
+                    onChange : function(val){
+                        if(val >= 3){
+                            document.getElementById("school-field-edit").style.display = "inline";
+                            $('.ui.form.educ').form('destroy');
+                            $(".ui.form.educ").form({
+                                fields: {
+                                    level: {
+                                    identifier: 'school[level]',
+                                    rules: [
+                                      {
+                                        type   : 'empty',
+                                        prompt : 'Field required.'
+                                      }    
+                                    ]},
+                                    name: {
+                                    identifier: 'school[name]',
+                                    rules: [
+                                      {
+                                        type   : 'empty',
+                                        prompt : 'Field required.'
+                                      }    
+                                    ]},
+                                    field: {
+                                    identifier: 'school[field]',
+                                    rules: [
+                                      {
+                                        type   : 'empty',
+                                        prompt : 'Field required.'
+                                      }    
+                                    ]},
+                                    loc: {
+                                    identifier: 'school[location]',
+                                    rules: [
+                                      {
+                                        type   : 'empty',
+                                        prompt : 'Field required.'
+                                      }    
+                                    ]},
+                                   
+                                    from: {
+                                    identifier: 'school[from]',
+                                    rules: [
+                                      {
+                                        type   : 'empty',
+                                        prompt : 'Field required.'
+                                      },
+                                      {
+                                          type : "checkYear[sch-from]",
+                                          prompt : 'Year entered must be less than year ended.'
+                                      }  
+                                    ]},
+                                    to: {
+                                    identifier: 'school[to]',
+                                    rules: [
+                                      {
+                                        type   : 'empty',
+                                        prompt : 'Field required.'
+                                      },
+                                      {
+                                          type : "checkYear[sch-to]",
+                                          prompt : 'Year ended must be greater than year entered.'
+                                      }
+                                    ]},
+                                    degree: {
+                                    identifier: 'school[degree]',
+                                    rules: [
+                                      {
+                                        type   : 'empty',
+                                        prompt : 'Field required.'
+                                      }    
+                                    ]}
+                                } 
+                            });
+                            
+                        } else {
+                            document.getElementById("school-field-edit").style.display = "none";
+                            $('.ui.form.educ').form('destroy');
+                            $(".ui.form.educ").form({
+                                fields: {
+                                    level: {
+                                    identifier: 'school[level]',
+                                    rules: [
+                                      {
+                                        type   : 'empty',
+                                        prompt : 'Field required.'
+                                      }    
+                                    ]},
+                                    name: {
+                                    identifier: 'school[name]',
+                                    rules: [
+                                      {
+                                        type   : 'empty',
+                                        prompt : 'Field required.'
+                                      }    
+                                    ]},
+                                    field: {
+                                    identifier: 'school[field]',
+                                    rules: [
+                                      {
+                                        type   : 'notRequired[0]',
+                                        prompt : 'Field required.'
+                                      }    
+                                    ]},
+                                    loc: {
+                                    identifier: 'school[location]',
+                                    rules: [
+                                      {
+                                        type   : 'empty',
+                                        prompt : 'Field required.'
+                                      }    
+                                    ]},
+                                    
+                                    from: {
+                                    identifier: 'school[from]',
+                                    rules: [
+                                      {
+                                        type   : 'empty',
+                                        prompt : 'Field required.'
+                                      },
+                                      {
+                                          type : "checkYear[sch-from]",
+                                          prompt : 'Year entered must be less than year ended.'
+                                      }  
+                                    ]},
+                                    to: {
+                                    identifier: 'school[to]',
+                                    rules: [
+                                      {
+                                        type   : 'empty',
+                                        prompt : 'Field required.'
+                                      },
+                                      {
+                                          type : "checkYear[sch-to]",
+                                          prompt : 'Year ended must be greater than year entered.'
+                                      }
+                                    ]},
+                                    degree: {
+                                    identifier: 'school[degree]',
+                                    rules: [
+                                      {
+                                        type   : 'empty',
+                                        prompt : 'Field required.'
+                                      }    
+                                    ]}
+                                } 
+                            });
+            
+                        }
+                    }
+                });
+                
+                //$(".menu-nav .item").on("click", function(){window.location.href=$(this).attr("data-link");});
+                $("#logout").on("click", function(){window.location.href=$(this).attr("data-link");});
                 $(".modal").modal({allowMultiple: true});
-                $("[data-type='modal']").on("click", function(){$("div[data-for='"+$(this).attr("data-for")+"']").modal("show");});
-                $("[data-submit]").on("click", function(){$("form[data-for='"+$(this).attr("data-submit")+"']").submit();});
+                $("[data-type='modal']").on("click", function(){
+                    if($(this).attr("data-for") === "edit-info"){
+                        $("input[data-name='user-loc']").val($("#user-loc-holder").val());
+                        $("#user-loc").dropdown('set selected', $("#user-loc-holder").val());
+                        $("input[data-name='user-educ']").val($("#user-educ-holder").val());
+                        $("#user-educ").dropdown('set selected', $("#user-educ-holder").val());
+                        $("input[data-name='user-pos']").val($("#user-pos-holder").val());
+                        $("#user-pos").dropdown('set selected', $("#user-pos-holder").val());
+                    }
+                    $("div[data-for='"+$(this).attr("data-for")+"']").modal({
+                        onShow : function(){
+                            $("#modal-check").val('2');
+                        },
+                        onHide : function(){
+                            $("#modal-check").val('0');
+                        }
+                        }).modal("show");
+                });
+                //$("[data-submit]").on("click", function(){$("form[data-for='"+$(this).attr("data-submit")+"']").submit();});
+                $("[data-submit]").on("click", function(){ $("input[id='"+$(this).attr("data-submit")+"']").click(); });
                 $('.message .close').on('click', function(){$(this).closest('.message').transition('fade');});
                 $("i[data-id]").on("click", edit_school_form);
                 $("i[data-work-id]").on("click", edit_work_form);
-                $("#modal-del").on("click", function(){$("div[data-for='del-sch']").modal("show");});
+                $("i[data-skill-id]").on("click", edit_skill_form);
+                $("i[data-mem-id]").on("click", edit_mem_form);
+                $("i[data-ach-id]").on("click", edit_ach_form);
+                $("i[data-link-id]").on("click", edit_link_form);
+                
+                $("#advance").on("click", function(){
+                    $('.ui.modal.advance').modal('show')
+                    //window.location.href=$(this).attr("data-link");
+                
+                });
+                $("#cancel_edit_sch").on("click", function(){ $("div[data-for='edit-school']").modal("hide"); });
+                $("#cancel_edit_work").on("click", function(){ $("div[data-for='edit-work']").modal("hide"); });
+                $("#cancel_edit_skill").on("click", function(){ $("div[data-for='edit-skill']").modal("hide"); });
+                $("#cancel_edit_mem").on("click", function(){ $("div[data-for='edit-membership']").modal("hide"); });
+                $("#cancel_edit_ach").on("click", function(){ $("div[data-for='edit-achievement']").modal("hide"); });
+                $("#cancel_edit_info").on("click", function(){ $("div[data-for='edit-info']").modal("hide"); });
+                $("#cancel_edit_pass").on("click", function(){ $("div[data-for='change-pass']").modal("hide"); });
+
+                
+                $("#cancel_add_sch").on("click", function(){ $("div[data-for='add-school']").modal("hide"); });
+                $("#cancel_add_work").on("click", function(){ $("div[data-for='add-work']").modal("hide"); });
+                $("#cancel_add_skill").on("click", function(){ $("div[data-for='add-skill']").modal("hide"); });
+                $("#cancel_add_diff_skill").on("click", function(){ $("div[data-for='add-diff-skill']").modal("hide"); });
+                $("#cancel_add_mem").on("click", function(){ $("div[data-for='add-membership']").modal("hide"); });
+                $("#cancel_add_ach").on("click", function(){ $("div[data-for='add-achievement']").modal("hide"); });
+                
+                $("#add-diff-skill").on("click", function(){
+                    $("div[data-for='add-skill']").modal("hide");
+                    $("#new_skill").val("");
+                    $("#new_rate").val("0");
+                    $("#currentValue_add").text("0%");
+                    $("div[data-for='add-diff-skill']").modal("show");
+                });
+                
+                $("#modal-del").on("click", function(){ $("div[data-for='del-sch']").modal("show"); });
+                $("#modal-del-work").on("click", function(){ $("div[data-for='del-work']").modal("show"); });
+                $("#modal-del-skill").on("click", function(){
+                    $(".ui.modal.skill_edit").modal("hide");
+                    $("div[data-for='del-skill']").modal("show");
+                });
+                $("#delete-mem").on("click", function(){$("div[data-for='del-mem']").modal("show");});
+                $("#delete-ach").on("click", function(){$("div[data-for='del-ach']").modal("show");});
+                $("#delete-link").on("click", function(){$("div[data-for='del-link']").modal("show");});
+                
                 $("#del-sch").on("click", function(){$("form[name='del-sch']").submit();});
-            });*/
-</script>
+                $("#del-work").on("click", function(){$("form[name='del-work']").submit();});
+                $("#del-skill").on("click", function(){$("form[name='del-skill']").submit();});
+                $("#del-mem").on("click", function(){$("form[name='del-mem']").submit();});
+                $("#del-ach").on("click", function(){$("form[name='del-ach']").submit();});
+                $("#del-link").on("click", function(){$("form[name='del-link']").submit();});
+                $("#check-about-me").on("click", function(){ $("#submit-about-me").click(); });
+                
+                $("#edit_pic").on("click", function(){$("#up_pic").click();});
+                $("#up_pic").on("change", function(){
+                    $("#upload_prof_pic").submit();
+                })
+                $("#delete_pic").on("click", function(){
+                    $(".ui.modal.delete").modal("show");
+                    
+                    $("#confirm_delete").on("click", function(){
+                        var src = document.getElementById("display_pic").getAttribute("src");
+                        $.ajax({
+                            type: "post",    
+                            url: "db.php",
+                            data: {request: "delete-pic", src: src}
+                        }).done(function(data) {
+                            window.location.href = "index.php#profile";
+                            window.location.reload();
+                        });
+                    });
+                });
+                $(".op").on("click", function(){
+                    /*var skill = $(this).text();
+                    $("div[data-for='add-skill']").modal("hide");
+                    document.getElementById("currentValue").innerHTML = "0%";
+                    document.getElementById("skill_rate").value = 0;
+                    document.getElementById("sel_skill").innerText = skill.toUpperCase();
+                    $(".ui.modal.skill").modal("show");
+                    
+                    $("#confirm_skill").on("click", function(){
+                        document.getElementById("myInput").value = skill;
+                        var rate = document.getElementById("currentValue").innerHTML;
+                        rate = rate.substr(0, rate.length-1);
+                        document.getElementById("skill_percent").value = rate;
+                        document.getElementById("add-skill").submit();
+                    });*/
+                    $("div[data-for='add-skill']").modal("hide");
+                    $("#new_skill").val($(this).text());
+                    $("#new_rate").val("0");
+                    $("#currentValue_add").text("0%");
+                    $("div[data-for='add-diff-skill']").modal("show");
+                });
+                
+                $("#confirm_interview").on("click", function(){
+                    var id = $(this).val();
+                    $(".ui.modal.confirm_interview").modal("show");
+                    $("#confirm_inv_interview").on("click", function(){
+                        document.getElementById("resked_id").value = id;
+                        document.getElementById("resked_status").value = "6";
+                        document.getElementById("resked_form").submit();
+                    });
+                });
+                
+                $("#decline_interview").on("click", function(){
+                    var id = $(this).val();
+                    $(".ui.modal.decline_interview").modal("show");
+                
+                    $("#withdraw_app").on("click", function(){
+                        $(".ui.modal.decline_interview").modal("hide");
+                        $(".ui.modal.decline_interview_confirm").modal("show");
+                        
+                        $("#confirm_withdraw").on("click", function(){
+                            document.getElementById("resked_id").value = id;
+                            document.getElementById("resked_status").value = "8";
+                            document.getElementById("resked_form").submit();
+                        });
+                    });
+                    
+                    $("#resked_interview").on("click", function(){
+                        var today = new Date();
+                        var dd = today.getDate()+1;
+                        var mm = today.getMonth()+1; //January is 0!
+                        var yyyy = today.getFullYear();
+                         if(dd<10){
+                                dd='0'+dd
+                            } 
+                            if(mm<10){
+                                mm='0'+mm
+                            }
+                        var hh = today.getHours();
+
+                        today = yyyy+'-'+mm+'-'+dd+'T08:00:00';
+                        document.getElementById("resked_datetime").setAttribute("min", today);
+                        
+                        $(".ui.modal.decline_interview").modal("hide");
+                        $(".ui.modal.resked_interview").modal("show");
+                        
+                        $("#confirm_resked").on("click", function(){
+                            document.getElementById("resked_id").value = id;
+                        });
+                    });
+                    
+                });
+                
+                $("#profile").on("click", function(){
+                    window.location.href = "index.php#profile";
+                    $("a[data-tab='2']").click();
+                });
+                
+                $("#display_pic").on("mouseover", function(){
+                    document.getElementById("edit_pic").style.opacity = "1";
+                    document.getElementById("delete_pic").style.opacity = "1";
+                    document.getElementById("display_pic").style.opacity = "0.5";
+                });
+                
+                $("#display_pic").on("mouseout", function(){
+                    document.getElementById("edit_pic").style.opacity = "0";
+                    document.getElementById("delete_pic").style.opacity = "0";
+                    document.getElementById("display_pic").style.opacity = "1";
+                });
+                
+                $("#delete_pic").on("mouseover", function(){
+                    document.getElementById("display_pic").style.opacity = "0.5";
+                    document.getElementById("edit_pic").style.opacity = "1";
+                    document.getElementById("delete_pic").style.opacity = "1";
+                });
+                
+                $("#delete_pic").on("mouseout", function(){
+                    document.getElementById("display_pic").style.opacity = "1";
+                    document.getElementById("edit_pic").style.opacity = "0";
+                    document.getElementById("delete_pic").style.opacity = "0";
+                });
+                
+                $("#edit_pic").on("mouseover", function(){
+                    document.getElementById("display_pic").style.opacity = "0.5";
+                    document.getElementById("edit_pic").style.opacity = "1";
+                    document.getElementById("delete_pic").style.opacity = "1";
+                });
+                
+                $("#edit_pic").on("mouseout", function(){
+                    document.getElementById("display_pic").style.opacity = "1";
+                    document.getElementById("edit_pic").style.opacity = "0";
+                    document.getElementById("delete_pic").style.opacity = "0";
+                });
+                
+                $(".write.q.icon").on("click", function(){
+                    //$("resume-edit").modal("show");
+                    $("div[data-for='edit-resume']").modal("show");
+                    $("input[data-name='resume_num']").val(this.title.substring(12));
+                    $("input[data-name='resume_name']").val(document.getElementById("resume_"+this.title.substring(12)).innerText);
+                    if(this.title.substring(12) === "1" && document.getElementById("public_url").value.toUpperCase().indexOf("CLASSIC") > -1){
+                        document.getElementById("default").checked = true;
+                    } else if(this.title.substring(12) === "2" && document.getElementById("public_url").value.toUpperCase().indexOf("CREATIVE") > -1){
+                        document.getElementById("default").checked = true;
+                    } else if(this.title.substring(12) === "3" && document.getElementById("public_url").value.toUpperCase().indexOf("EXECUTIVE") > -1){
+                        document.getElementById("default").checked = true;;
+                    } else {
+                        document.getElementById("default").checked = false;
+                    }
+                    //document.getElementById("resume_num").value = this.title.substring(12);
+                    //document.getElementById("resume_name").value = document.getElementById("resume_"+this.title.substring(12)).innerText;
+                });
+                
+                $(".camera.icon").on("click", function(){
+                    $("div[data-for='view_pic']").modal("show");
+                    $("#confirm_creative").on("click", function(){
+                        $("div[data-for='view_pic']").modal("hide");
+                        $("div[data-for='upload_pic']").modal("show");
+                        
+                        $("#upload_creative").on("click", function(){
+                           $("#confirm_upload_creative").click(); 
+                        });
+                    });
+                });
+                
+                $(".record.icon").on("click", function(){
+                    $("div[data-for='view_vid']").modal("show");
+                    $("#confirm_creative_vid").on("click", function(){
+                        $("div[data-for='view_vid']").modal("hide");
+                        $("div[data-for='add_vid']").modal("show");
+                        
+                        $("#upload_creative_vid").on("click", function(){
+                           $("#confirm_upload_creative_vid").click(); 
+                        });
+                    });
+                });
+                
+                //$("#select-web").dropdown('set selected', 'facebook');
+                
+            });
+            
+            $.fn.form.settings.rules.notRequired = function (inputValue, validationValue) {
+                return true;
+            }
+            
+            $.fn.form.settings.rules.checkYear = function (inputValue, validationValue) {
+                var modal = "";
+                
+                if($("#modal-check").val() == '2'){
+                    modal += "-add";
+                }
+            
+                if(validationValue.substring(validationValue.indexOf("-")+1) == "to"){
+                    return $("#"+validationValue+modal).dropdown('get value') >= $("#"+validationValue.substring(0, validationValue.indexOf("-")+1)+"from"+modal).dropdown('get value');
+                } else {
+                    return $("#"+validationValue+modal).dropdown('get value') <= $("#"+validationValue.substring(0, validationValue.indexOf("-")+1)+"to"+modal).dropdown('get value');
+                }
+            }
+            
+            $(".ui.form.educ").form({
+                fields: {
+                    level: {
+                    identifier: 'level',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }    
+                    ]},
+                    name: {
+                    identifier: 'name',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }    
+                    ]},
+                    field: {
+                    identifier: 'field',
+                    rules: [
+                      {
+                        type   : 'notRequired[0]',
+                        prompt : 'Field required.'
+                      }    
+                    ]},
+                    loc: {
+                    identifier: 'location',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }    
+                    ]},
+                    
+                    from: {
+                    identifier: 'from',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      },
+                      {
+                          type : "checkYear[sch-from]",
+                          prompt : 'Year entered must be less than year ended.'
+                      }  
+                    ]},
+                    to: {
+                    identifier: 'to',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      },
+                      {
+                          type : "checkYear[sch-to]",
+                          prompt : 'Year ended must be greater than year entered.'
+                      }
+                    ]},
+                    degree: {
+                    identifier: 'degree',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }    
+                    ]}
+                } 
+            });
+            
+            $(".ui.form.work").form({
+                fields: {
+                    name: {
+                    identifier: 'work[name]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }    
+                    ]},
+                    pos: {
+                    identifier: 'work[pos]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }    
+                    ]},
+                    ind: {
+                    identifier: 'work[industry]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }    
+                    ]},
+                    field: {
+                    identifier: 'work[field]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }    
+                    ]},
+                    loc: {
+                    identifier: 'work[location]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }    
+                    ]},
+                   
+                    from: {
+                    identifier: 'work[from]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      },
+                      {
+                          type : "checkYear[work-from]",
+                          prompt : 'Year entered must be less than year ended.'
+                      } 
+                    ]},
+                    to: {
+                    identifier: 'work[to]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      },
+                      {
+                          type : "checkYear[work-to]",
+                          prompt : 'Year ended must be greater than year entered.'
+                      }
+                    ]},
+                    des: {
+                    identifier: 'work[des]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }    
+                    ]}
+                } 
+            });
+            
+            
+            $(".ui.form.ach").form({
+                fields: {
+                    title: {
+                    identifier: 'achievement[title]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }    
+                    ]},
+                    year: {
+                    identifier: 'achievement[year]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }    
+                    ]},
+                    des: {
+                    identifier: 'achievement[des]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }    
+                    ]}
+                } 
+            });
+            
+            $(".ui.form.mem").form({
+                fields: {
+                    assoc: {
+                    identifier: 'membership[assoc]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }    
+                    ]},
+                    from: {
+                    identifier: 'membership[from]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      },
+                      {
+                          type : "checkYear[mem-from]",
+                          prompt : 'Year entered must be less than year ended.'
+                      }
+                    ]},
+                    to: {
+                    identifier: 'membership[to]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      },
+                      {
+                          type : "checkYear[mem-to]",
+                          prompt : 'Year ended must be greater than year entered.'
+                      }
+                    ]},
+                    des: {
+                    identifier: 'membership[des]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }    
+                    ]}
+                } 
+            });
+            
+            $(".ui.form.link").form({
+                fields: {
+                    url: {
+                    identifier: 'link[url]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }    
+                    ]},
+                    web: {
+                    identifier: 'link[web]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }    
+                    ]}
+                } 
+            });
+            
+            $(".ui.form.abt").form({
+                fields: {
+                    url: {
+                    identifier: 'abt[url]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }    
+                    ]},
+                    intro: {
+                    identifier: 'abt[intro]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }    
+                    ]}
+                } 
+            });
+            
+            $.fn.form.settings.rules.checkLength = function (inputValue, validationValue) {
+                return inputValue.length == validationValue;
+            }
+            
+            $(".ui.form.user").form({
+                fields: {
+                    fname: {
+                    identifier: 'user[f_name]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }
+                    ]},
+                    lname: {
+                    identifier: 'user[l_name]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }    
+                    ]},
+                    loc: {
+                    identifier: 'user[location]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }    
+                    ]},
+                    mob: {
+                    identifier: 'user[mob]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      },
+                      {
+                        type : 'checkLength[10]',
+                        prompt : 'Enter a valid mobile number.'
+                      },
+                      {
+                        type   : 'regExp[/^[0-9]{10}$/]',
+                        prompt : 'Enter a valid mobile number.'
+                      } 
+                    ]},
+                    tel: {
+                    identifier: 'user[tel]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      },
+                      {
+                        type : 'checkLength[7]',
+                        prompt : 'Enter a valid telephone number.'
+                      },
+                      {
+                        type   : 'regExp[/^[0-9]{7}$/]',
+                        prompt : 'Enter a valid telephone number.'
+                      } 
+                    ]},
+                    email: {
+                    identifier: 'user[email]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      },
+                      {
+                        type   : 'regExp[/^[a-zA-Z0-9.-_]{1,}@[a-zA-Z0-9.-]{1,}[.]{1}[a-zA-Z0-9]{2,}$/]',
+                        prompt : 'Please enter a valid email.'
+                      }    
+                    ]},
+                    pos: {
+                    identifier: 'user[latest_pos]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }    
+                    ]}
+                } 
+            });
+            
+            $(".ui.form.resume").form({
+                fields: {
+                    name: {
+                    identifier: 'resume[name]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }
+                    ]}
+                }
+            });
+            
+            $(".ui.form.pic").form({
+                fields: {
+                    file: {
+                    identifier: 'file_to_upload',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }
+                    ]},
+                    des: {
+                    identifier: 'description',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }
+                    ]}
+                }
+            });
+            
+            $(".ui.form.vid").form({
+                fields: {
+                    file: {
+                    identifier: 'filename',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }
+                    ]},
+                    des: {
+                    identifier: 'description',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }
+                    ]}
+                }
+            });
+            
+            $(".ui.form.pw").form({
+                fields: {
+                    old: {
+                    identifier: 'user[old_pass]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }
+                    ]},
+                    new_p: {
+                    identifier: 'user[new_pass]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      }
+                    ]},
+                    confirm: {
+                    identifier: 'user[confirm_pass]',
+                    rules: [
+                      {
+                        type   : 'empty',
+                        prompt : 'Field required.'
+                      },
+                      {
+                        type   : 'match[user[new_pass]]',
+                        prompt : 'Field required.'
+                      }
+                    ]}
+                }
+            });
+            
+        </script>
     </body>
