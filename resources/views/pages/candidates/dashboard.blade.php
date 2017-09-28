@@ -4,305 +4,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <link rel="stylesheet" type="text/css" href="{{asset('css/semantic/semantic.css')}}">
+        <link rel="stylesheet" type="text/css" href="{{asset('css/dashboard.css')}}">
         <link href='https://fonts.googleapis.com/css?family=Quantico' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" type="text/css" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <title>Job Finder | Home</title>
-        <style>
-            * { 
-                box-sizing: border-box;
-                font-size: 1.0em;
-                font-weight: 100;
-                margin: 0;
-            }
-			html, body {
-				width: 100%;
-				font-family: GillSans, Calibri, Trebuchet, sans-serif;
-			}
-			.head { background-color: #2185D0; }
-            .white { color: #FFF !important; }
-            div.search-bar { 
-                background-color: #EEEEEE;
-                margin-bottom: 20px;
-            }
-            div.search-bar div {
-                padding-top: 3px;
-                padding-bottom: 3px;
-            }
-            #myInput {
-                background-image: url('/css/searchicon.png'); /* Add a search icon to input */
-                background-position: 10px 12px; /* Position the search icon */
-                background-repeat: no-repeat; /* Do not repeat the icon image */
-                width: 100%; /* Full-width */
-                font-size: 16px; /* Increase font-size */
-                padding: 12px 20px 12px 40px; /* Add some padding */
-                border: 1px solid #ddd; /* Add a grey border */
-                margin-bottom: 12px; /* Add some space below the input */
-            }
-            #myUL {
-                /* Remove default list styling */
-                list-style-type: none;
-                padding: 0;
-                margin: 0;
-            }
-
-            #myUL li a {
-                border: 1px solid #ddd; /* Add a border to all links */
-                margin-top: -1px; /* Prevent double borders */
-                background-color: #f6f6f6; /* Grey background color */
-                padding: 12px; /* Add some padding */
-                text-decoration: none; /* Remove default text underline */
-                font-size: 18px; /* Increase the font-size */
-                color: black; /* Add a black text color */
-                display: block; /* Make it into a block element to fill the whole list */
-            }
-
-            #myUL li a.header {
-                background-color: #e2e2e2; /* Add a darker background color for headers */
-                cursor: default; /* Change cursor style */
-            }
-
-            #myUL li a:hover:not(.header) {
-                background-color: #eee; /* Add a hover effect to all links, except for headers */
-            }
-            
-            
-            #edit_pic {
-                position:absolute;
-                top:35%;
-                margin: auto;
-                z-index: 2;
-                opacity: 0;
-                transition: opacity 1s ease-in-out;
-                -moz-transition: opacity 1s ease-in-out;
-                -webkit-transition: opacity 1s ease-in-out;
-            }
-            
-            #delete_pic {
-                position:absolute;
-                top:55%;
-                margin: auto;
-                z-index: 2;
-                opacity: 0;
-                transition: opacity 1s ease-in-out;
-                -moz-transition: opacity 1s ease-in-out;
-                -webkit-transition: opacity 1s ease-in-out;
-            }
-            
-            #display_pic {
-                position: relative;
-                transition: opacity 1s ease-in-out;
-                -moz-transition: opacity 1s ease-in-out;
-                -webkit-transition: opacity 1s ease-in-out;
-                display: block;
-                width: 100%;
-            }
-            
-            #display_pic:hover {
-                opacity:0.5;
-            }
-            
-            #display_pic_div {
-                position: relative;
-                margin: 20px auto 0;
-                width: 100%;
-                max-width: 400px;
-            }
-            
-            
-            .fa.fa-thumbs-down {
-                color: white;
-                text-shadow: 0px 1px 5px #000;
-            }
-            
-            .fa.fa-thumbs-up {
-                color: white;
-                text-shadow: 0px 1px 5px #000;
-            }
-            
-            .fa.fa-thumbs-up:hover {
-                color: #32ffff;
-            }
-            
-            .fa.fa-thumbs-down:hover {
-                color: #ff0a0a;
-            }
-            
-            .invited_icons {
-                background: transparent;
-                border: none !important;
-                float: right;
-            }
-            
-            .fa.fa-comments {
-                text-shadow: 0px 1px 5px #000;
-                color: white;
-            }
-            
-            .fa.fa-comments:hover {
-                 color: yellow;
-            }
-            
-            .resume_name {
-                display: inline;
-            }
-            
-              /* Popup container - can be anything you want */
-            .pop_up {
-                position: relative;
-                display: inline-block;
-                margin-top: 40px;
-                margin-left: 89px;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-            }
-
-            /* The actual popup */
-            .pop_up .pop_up_text {
-                width: 200px;
-                background-color: #1a94db;
-                color: #fff;
-                text-align: center;
-                border-radius: 6px;
-                padding: 8px 0;
-                position: absolute;
-                font-size: 13px;
-                z-index: 1;
-                bottom: 125%;
-                left: 50%;
-                margin-left: -80px;
-            }
-
-            /* Popup arrow */
-            .pop_up .pop_up_text::after {
-                content: "";
-                position: absolute;
-                top: 0%;
-                left: 25%;
-                margin-top: -10px;
-                border-width: 5px;
-                border-style: solid;
-                border-color: transparent transparent #1a94db transparent;
-            }
-            
-            .bullseye.icon {
-                color: red;
-            }
-            
-            .default_button {
-                background: transparent;
-                border: none !important;
-                width: 25px;
-            }
-            
-            
-            .gallery_container {
-                padding: 5px;
-                overflow-x: auto;
-                white-space: nowrap;
-            }
-            
-            .creative_pics {
-                height: 10%;
-                width: 10%;
-                border: 1px solid gray;
-                cursor: pointer;
-            }
-            
-            .creative_pics:hover {
-                -webkit-transform:scale(1.1); /* Safari and Chrome */
-                -moz-transform:scale(1.1); /* Firefox */
-                -ms-transform:scale(1.1); /* IE 9 */
-                -o-transform:scale(1.1); /* Opera */
-                 transform:scale(1.1);
-            }
-            
-            .display_picture {
-                width: 100%;
-                height: 10%;
-                position: relative;
-            }
-            
-            .delete_display_picture {
-                display: inline-block;
-                float:right;
-                margin:5px 5px 0 0;
-                position: absolute;
-                top: 0;
-                right: 0;
-            }
-            
-            #resume_1, #resume_2, #resume_3, .info_cont {
-                white-space: nowrap;
-                overflow:hidden !important;
-                text-overflow: ellipsis;
-            }
-            
-            #resume_notif {
-                overflow: auto;
-            }
-            
-            .block-wrap {
-              display: inline-block;
-              max-width: 100%;
-            }
-            
-            .textResume {
-              display: block;
-              overflow: hidden;
-              white-space: nowrap;
-              text-overflow: ellipsis;
-            }
-            
-            .right.text.icon {
-              float: right;
-              margin-left: 5px;
-              cursor: pointer;
-            }
-            
-            .left.text.icon {
-                float: left;
-                margin-right: 5px;
-            }
-            
-            .chevron.circle.right.icon, .right.text.icon, .camera.icon, .record.icon, .toggle.on.icon {
-                cursor: pointer;
-            }
-            
-            .chevron.circle.right.icon:hover, .right.text.icon:hover, .camera.icon:hover, .record.icon:hover, .toggle.on.icon:hover {
-                color: blue;
-            }
-            
-            .card {
-                position: relative;
-                width: 50%;
-            }
-            .image {
-              opacity: 1;
-              display: block;
-              width: 100%;
-              height: auto;
-              transition: .5s ease;
-              backface-visibility: hidden;
-            }
-            .middle {
-              transition: .5s ease;
-              opacity: 0;
-              position: absolute;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%);
-              -ms-transform: translate(-50%, -50%)
-            }
-            .card:hover .image {
-              opacity: 0.3;
-            }
-            .card:hover .middle {
-              opacity: 1;
-            }
-		</style>
 	</head>
 
     <body>
@@ -354,6 +60,9 @@
                                 echo "<div class='item' data-value='".$row[0]."'>".$row[1]."</div>";
                                     }*/
                                 ?>
+                            @foreach($cities as $city)
+                                {{"<div class='item' data-value='".$city->id."'>".$city->name."</div>"}}
+                            @endforeach
                           </div>
                         </div>
                         <div class="ui selection dropdown">
@@ -795,20 +504,17 @@
                             </div>
                             <?php // if(isset($_SESSION["work_edit"])): ?>
                             @if(Session::has('work_edit'))
-                            <?php //$color = ($_SESSION["work_edit"]["success"]) ? "positive" : "negative"; ?>
                             <!-- message from the server -->
                             <div class="row">
                                 <div class="sixteen wide column">
-                                    <div class="ui <?php //echo $color; ?> message">
+                                    <div class="ui <?php session('success') ? "positive" : "negative" ?> message">
                                       <i class="close icon"></i>
-                                      <div class="header"><?php //echo $_SESSION["work_edit"]["header"]; ?></div>
-                                      <p><?php //echo $_SESSION["work_edit"]["msg"]; ?></p>
+                                      <div class="header">{{session('header')}}</div>
+                                      <p>{{session('msg')}}</p>
                                     </div>
-                                    <?php //unset($_SESSION["work_edit"]); ?>
-                            Session::forget('work_edit');
+                                   <?php Session::forget('work_edit'); ?>
                                 </div>
                             </div>
-                            <?php //endif; ?>
                             @endif
                         </div>
                         <div class="ui grid">
@@ -1186,7 +892,7 @@
                 <div class="ui modal" data-for="add-school">
                   <div class="header">Add Education</div>
                   <div class="content">
-                    <form class="ui form educ" data-for="add-school" method="post" action="educ" id="add-school-form">
+                    <form class="ui form educ" data-for="add-school" method="post" action="add-educ" id="add-school-form">
                       <input type="hidden" name="request" value="add-school">
                        {{ csrf_field() }}
                       
@@ -1271,6 +977,250 @@
                 </div>
                 
                  <!-- pop-up window for adding work background -->
+                 <div class="ui modal" data-for="add-work">
+                  <div class="header">Add Work Experience</div>
+                  <div class="content">
+                    <form class="ui form work" data-for="add-work" method="post" action="add-work">
+                      <input type="hidden" name="request" value="add-work">
+                      {{ csrf_field() }}
+                      <div class="field">
+                        <label>Company Name</label>
+                        <input type="text" name="name" placeholder="Your company" maxlength="100">
+                      </div>
+                    
+                      
+                      <div class="field">
+                          <label>Position:</label>
+                          <input type="text" name="pos" id="default" maxlength="50" list="languages" placeholder="Search for Position">
+  
+                          <datalist id="languages">
+                            <?php
+                              /*  $result1 = $db->get_position();
+                                     foreach($result1 as $row1):
+                                         echo "<option value='".$row1[1]."'>";
+                                
+                                     endforeach;*/
+                            ?>
+                                @foreach($position as $pos)
+                                    <option value="{{$pos->latest_pos}}">{{$pos->latest_id}}</option>
+                                @endforeach
+                          </datalist>
+  
+                      </div>
+                      
+                      <div class="field">
+                        <label>Industry</label>
+                        <!--<input type="text" name="work[location]">-->
+                        
+                        <div class="ui fluid search selection dropdown">
+                          <input type="hidden" name="industry">
+                          <i class="dropdown icon"></i>
+                          <div class="default text">Industry</i></div>
+                          <div class="menu">
+                            @foreach($industry as $ind)
+                                <div class="item" data-value="{{$ind->id}}">{{$ind->name}}</div>
+                            @endforeach
+                          </div>
+                        </div>
+                      </div> 
+                      
+                      <div class="field">
+                          <label>Field of Study</label>
+                          <div class="ui fluid search selection dropdown">
+                          <input type="hidden" name="field">
+                          <i class="dropdown icon"></i>
+                          <div class="default text">Field of Study</i></div>
+                          <div class="menu">
+                            <?php
+                            /* $result_field = $db->get_field_study();
+                            foreach($result_field as $field){ */?>
+                            @foreach($job_category as $job)
+                                <div class="item" data-value="{{$job->id}}">{{$job->category}}</div>
+                            <?php// } ?>
+                            @endforeach
+                          </div>
+                        </div>
+                        </div>
+                      
+                      <div class="field">
+                          <label>Location</label>
+                          <div class="ui fluid search selection dropdown">
+                          <input type="hidden" name="location">
+                          <i class="dropdown icon"></i>
+                          <div class="default text">Work Location</i></div>
+                          <div class="menu">
+                            <?php
+                               /* $result_loc = $db->get_location();
+                                foreach($result_loc as $row){ */ ?>
+                            @foreach($location as $loc)
+                                <div class="item" data-value="{{$loc->city.', '.$loc->province}}">{{$loc->city.', '.$loc->province}}</div>
+                            @endforeach
+                          </div>
+                        </div>
+                        </div>
+                      
+                      <div class="two fields">
+                          <div class="field">
+                            <label> From </label>
+                            <div id="sch-to-add">
+                              <input type="date" name="from">
+                            </div>
+                          </div> 
+                          <div class="field">
+                            <label> To </label>
+                            <div id="sch-to-add">
+                              <input type="date" name="to">
+                            </div>
+                          </div> 
+                    </div>
+                      
+                      <div class="field">
+                        <label>Work Description</label>
+                        <textarea rows="2" name="des" placeholder="Describe your job" maxlength="255"></textarea>
+                      </div> 
+                    <input type="hidden" name="user_id" value="{{$user->id}}">
+                      <button class="ui green button" type="submit" style="float: right;">Add</button>
+                      <button class="ui blue button" type="button" id="cancel_add_work">Cancel</button>
+                    </form>
+                  </div>
+                </div>
+                <!-- pop-up window for adding membership -->
+                <div class="ui modal" data-for="add-membership">
+                  <div class="header">Add Membership</div>
+                  <div class="content">
+                    <form class="ui form mem" data-for="add-membership" method="post" action="db.php">
+                      <input type="hidden" name="request" value="add-membership">
+                        <div class="field">
+                        <label>Association Name</label>
+                        <input type="text" name="membership[assoc]" maxlength="100">
+                      </div>
+                     
+                      <div class="two fields">
+                          <div class="field">
+                            <label>From</label>
+                            <!--<input type="text" name="school[from]">-->
+                            
+                            <div class="ui fluid search selection dropdown" id="mem-from-add">
+                              <input type="hidden" name="membership[from]">
+                              <i class="dropdown icon"></i>
+                              <div class="default text">Year entered</i></div>
+                              <div class="menu">
+                                <?php //for($i=1980; $i<=date("Y"); $i++){ ?>
+                                    <div class="item" data-value="<?php //echo $i; ?>"><?php //echo $i; ?></div>
+                                <?php //} ?>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div class="field">
+                            <label>To</label>
+                            <!--<input type="text" name="school[from]">-->
+                            
+                            <div class="ui fluid search selection dropdown" id="mem-to-add">
+                              <input type="hidden" name="membership[to]">
+                              <i class="dropdown icon"></i>
+                              <div class="default text">Year ended</i></div>
+                              <div class="menu">
+                                <?php //for($i=1980; $i<=date("Y"); $i++){ ?>
+                                    <div class="item" data-value="<?php //echo $i; ?>"><?php // echo $i; ?></div>
+                                <?php // } ?>
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+                        
+                          
+                          <div class="field">
+                        <label>Description</label>
+                        <textarea rows="2" name="membership[des]" maxlength="255"></textarea>
+                      </div> 
+                      <button class="ui green button" type="submit" style="float: right;">Add</button>
+                      <button class="ui blue button" type="button" id="cancel_add_mem">Cancel</button>
+                    </form>
+                  </div>
+                </div>
+                
+                <!-- pop-up window for adding achievement -->
+                <div class="ui modal" data-for="add-achievement">
+                  <div class="header">Add Achievement</div>
+                  <div class="content">
+                    <form class="ui form ach" data-for="add-achievement" method="post" action="db.php">
+                      <input type="hidden" name="request" value="add-achievement">
+                      <div class="field">
+                        <label>Achievement Name</label>
+                        <input type="text" name="achievement[title]" maxlength="70">
+                      </div>
+                      
+                      <div class="field">
+                        <label>Year</label>
+                        <!--<input type="text" name="school[from]">-->
+                        
+                        <div class="ui fluid search selection dropdown">
+                          <input type="hidden" name="achievement[year]">
+                          <i class="dropdown icon"></i>
+                          <div class="default text">Year entered</i></div>
+                          <div class="menu">
+                            <?php //for($i=1980; $i<=date("Y"); $i++){ ?>
+                                <div class="item" data-value="<?php //echo $i; ?>"><?php //echo $i; ?></div>
+                            <?php //} ?>
+                          </div>
+                        </div>
+                      </div>
+                  
+                      <div class="field">
+                        <label>Description</label>
+                        <textarea rows="2" name="achievement[des]" maxlength="255"></textarea>
+                      </div> 
+                      <button class="ui green button" type="submit" style="float: right;">Add</button>
+                      <button class="ui blue button" type="button" id="cancel_add_ach">Cancel</button>
+                    </form>
+                  </div>
+                </div>
+                <!-- pop-up window for advanced search-->
+
+                <!--nothing yet, will add later-->
+                <!-- pop-up window for adding skills -->
+                <div class="ui modal" data-for="add-skill">
+                  <div class="header">Add Skills</div>
+                  <div class="content">
+                    <form class="ui form" id="add-skill" data-for="add-skill" method="post" action="db.php">
+                      <input type="hidden" name="request" value="add-skill">
+                      <input type="hidden" id="skill_percent" name="skill[percent]" value="0">
+                      <div class="field">
+                        <input type="text" name="skill[name]" id="myInput" onkeyup="myFunction()" placeholder="Search for skills..">
+                          <ul id="myUL">
+                               <?php
+                                /*$result1 = $db->get_skill_list();
+                                     foreach($result1 as $row1):
+                                         echo "<li><a value=".$row1[0]." class='op' href='#'>".$row1[1]."</a></li>";
+                                
+                                     endforeach;*/
+                            ?>
+                          </ul>
+                      </div>
+                        <button class ="ui green button" type="button" id="add-diff-skill" style="float: right;">Add Different Skill</button>
+                        <button class="ui blue button" type="button" id="cancel_add_skill">Cancel</button>
+                      <!--<button class="ui green button" type="submit">Submit</button>
+                      -->
+                    </form>
+                      
+                      <form class="ui form" id="update-skill" method="post" action="db.php">
+                      <input type="hidden" name="request" value="update-skill">
+                      <input type="hidden" id="skill_percent_edit" name="skill_ed[percent]" value="0">
+                      <input type="hidden" id="skill_id" name="skill_ed[id]" value="0">
+                      <!--<button class="ui green button" type="submit">Submit</button>
+                      <button class="ui red button" type="button">Cancel</button>-->
+                    </form>
+                      
+                      <form class="ui form" id="delete-skill" method="post" action="db.php">
+                      <input type="hidden" name="request" value="delete-skill">
+                      <input type="hidden" id="skill_id_del" name="skill_del[id]" value="0">
+                      <!--<button class="ui green button" type="submit">Submit</button>
+                      <button class="ui red button" type="button">Cancel</button>-->
+                    </form>
+                      
+                  </div>
+                </div>
                       </div>
                     </div>
         <script src="{{asset('js/jquery.js')}}"></script>

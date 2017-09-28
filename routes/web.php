@@ -20,5 +20,6 @@ Route::get('/about/{id}/{name}', function ($id, $name) {
 });
 Route::get('/dashboard', 'HomeController@index');
 Route::resource('posts', 'PostsController');
-Route::post('educ', 'EducController@store');
+Route::post('add-educ', 'EducController@store');
+Route::post('add-work', 'WorkController@store');
 Auth::routes();

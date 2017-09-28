@@ -8,4 +8,5 @@ class Latest_Position extends Model
 {
     protected $table = 'position';
     protected $primaryKey = 'id';
+    public $timestamps = false;
 }

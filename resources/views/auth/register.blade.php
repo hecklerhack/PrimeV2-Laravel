@@ -125,7 +125,7 @@
   
                           <datalist id="languages">
                             @foreach($position as $pos)
-                                <option value="{{$pos->latest_pos}}">{{$pos->latest_id}}</option>
+                                <option value="{{$pos->latest_pos}}">{{$pos->id}}</option>
                             @endforeach
                           </datalist>
   
