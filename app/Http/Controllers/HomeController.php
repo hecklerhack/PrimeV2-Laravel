@@ -17,6 +17,7 @@ use App\Job_Category;
 use App\Latest_Position;
 use App\Industry;
 use App\City;
+use App\Skills;
 
 class HomeController extends Controller
 {
@@ -52,9 +53,10 @@ class HomeController extends Controller
         $position = Latest_Position::all();
         $industry = Industry::all();
         $cities = City::all();
+        $skills = Skills::all();
        return view('pages.candidates.dashboard')->with(['user' => $user, 'candidate' => $candidate, 'resume' => $resume, 'links' => $links, 'candidate_educ' => $candidate_educ, 'candidate_exp' => $candidate_exp,
         'candidate_achieve' => $candidate_achieve, 'candidate_member' => $candidate_member, 'candidate_skills' => $candidate_skills, 'location' => $location, 'job_category' => $job_category, 'position' => $position, 'industry' => $industry,
-        'cities' => $cities]);
+        'cities' => $cities, 'skills' => $skills]);
         //return $position;
     }
 }

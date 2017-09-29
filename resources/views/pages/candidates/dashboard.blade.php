@@ -257,10 +257,10 @@
                              <div class="sixteen wide column">
                                 <div class="ui positive message">
                                     <i class="close icon"></i>
-                                      <div class="header"><?php //echo $_SESSION["abt"]["header"]; ?></div>
+                                      <div class="header">{{session('header')}}</div>
                                       <p><?php //echo $_SESSION["abt"]["msg"]; ?></p>
                                     </div>
-                                    Session::forget('abt');
+                                   <?php Session::forget('abt'); ?>
                                 </div>
                             </div>
                     @endif
@@ -320,14 +320,13 @@
                                         <div class="sixteen wide column">
                                             <div class="ui positive message">
                                             <i class="close icon"></i>
-                                            <div class="header"><?php //echo $_SESSION["link"]["header"]; ?></div>
-                                            <p><?php //echo $_SESSION["link"]["msg"]; ?></p>
+                                            <div class="header">{{session('header')}}</div>
+                                            <p><strong>{{session('msg')}}</strong> has been added to your profile.</p>
                                             </div>
                                             <?php //unset($_SESSION["link"]); ?>
-                                            Session::forget('link');
+                                            <?php Session::forget('link'); ?>
                                         </div>
                                     </div>
-                                <?php //endif; ?>
                                 @endif
                                 <div class="row">
                                     <div class="eight wide column">
@@ -594,20 +593,17 @@
                             </div>
                             <?php //if(isset($_SESSION["achieve"])): ?>
                             @if(Session::has('achieve'))
-                            <?php //$color = ($_SESSION["achieve"]["success"]) ? "positive" : "negative"; ?>
                             <!-- message from the server -->
                             <div class="row">
                                 <div class="sixteen wide column">
-                                    <div class="ui <?php // echo $color; ?> message">
+                                    <div class="ui <?php session('success') ? 'positive' : 'negative' ?> message">
                                       <i class="close icon"></i>
-                                      <div class="header"><?php // echo $_SESSION["achieve"]["header"]; ?></div>
-                                      <p><?php //echo $_SESSION["achieve"]["msg"]; ?></p>
+                                      <div class="header">{{session('header')}}</div>
+                                      <p>{{session('msg')}}</p>
                                     </div>
-                                    <?php //unset($_SESSION["achieve"]); ?>
-                                    Session::forget('achieve');
+                                    <?php Session::forget('achieve'); ?>
                                 </div>
                             </div>
-                            <?php //endif; ?>
                             @endif
                         </div>
                         <div class="ui grid">
@@ -641,12 +637,6 @@
                                       </div>
                                     </h2>
                                     <?php
-                                           /* $result_temp = $db->get_candidate_membership($_SESSION['email']);
-                                            
-                                            if($result_temp[1]->rowCount() == 0){
-                                                echo "At least one is needed to generate a resume.";
-                                                $chk_mem = false;
-                                            }*/
                                             $chk_mem = true;
                                         ?>
                                         @if(count($candidate_member) == 0)
@@ -660,19 +650,16 @@
                                 </div>
                             </div>
                             <!-- Romeo start -->
-                            <?php //if(isset($_SESSION["mem"])): ?>
                             @if(Session::has('mem'))
-                            <?php //$color = ($_SESSION["mem"]["success"]) ? "positive" : "negative"; ?>
                             <!-- message from the server -->
                             <div class="row">
                                 <div class="sixteen wide column">
-                                    <div class="ui <?php //echo $color; ?> message">
+                                    <div class="ui <?php session('success') ? 'positive' : 'negative' ?> message">
                                       <i class="close icon"></i>
-                                      <div class="header"><?php // echo $_SESSION["mem"]["header"]; ?></div>
-                                      <p><?php //echo $_SESSION["mem"]["msg"]; ?></p>
+                                      <div class="header">{{session('header')}}</div>
+                                      <p><strong>{{session('msg')}}</strong> has been added to your profile</p>
                                     </div>
-                                    <?php //unset($_SESSION["mem"]); ?>
-                                    Session::forget('mem');
+                                   <?php  Session::forget('mem'); ?>
                                 </div>
                             </div>
                             @endif
@@ -700,9 +687,6 @@
                                 </div>
                                 
                             </div>
-                            <?php
-                                      //      }
-                                    ?>
                                     @empty
                             @endforelse
                         </div>
@@ -742,13 +726,13 @@
                             <!-- message from the server -->
                             <div class="row">
                                 <div class="sixteen wide column">
-                                    <div class="ui <?php //echo $color; ?> message">
+                                    <div class="ui <?php session('skl') ? 'positive' : 'negative'; ?> message">
                                       <i class="close icon"></i>
-                                      <div class="header"><?php //echo $_SESSION["skl"]["header"]; ?></div>
-                                      <p><?php //echo $_SESSION["skl"]["msg"]; ?></p>
+                                      <div class="header">{{session('header')}}</div>
+                                      <p><strong>{{session('msg')}}</strong> has been added.</p>
                                     </div>
                                     <?php //unset($_SESSION["skl"]); ?>
-                                    Session::forget('skl')
+                                    <?php Session::forget('skl') ?>
                                 </div>
                             </div>
                             <?php //endif; ?>
@@ -832,7 +816,7 @@
                         
                         @if($chk_educ && $chk_work && $chk_ach && $chk_mem && $chk_skill && $chk_abt)
                           <i class="toggle on icon" onclick="openWin1()" title="Edit Visibility of Resume 1"></i>
-                          <a href="{{'Resumes/Classic%202/index.php?u='.$resume->url}}" target="_blank" style="color: black;"><i class="chevron circle right icon" title="Public View Resume 1"></i></a>
+                          <a href="{{'/Classic?u='.$resume->url}}" target="_blank" style="color: black;"><i class="chevron circle right icon" title="Public View Resume 1"></i></a>
                          @endif
                         </center>
                     </div>
@@ -994,13 +978,6 @@
                           <input type="text" name="pos" id="default" maxlength="50" list="languages" placeholder="Search for Position">
   
                           <datalist id="languages">
-                            <?php
-                              /*  $result1 = $db->get_position();
-                                     foreach($result1 as $row1):
-                                         echo "<option value='".$row1[1]."'>";
-                                
-                                     endforeach;*/
-                            ?>
                                 @foreach($position as $pos)
                                     <option value="{{$pos->latest_pos}}">{{$pos->latest_id}}</option>
                                 @endforeach
@@ -1088,11 +1065,12 @@
                 <div class="ui modal" data-for="add-membership">
                   <div class="header">Add Membership</div>
                   <div class="content">
-                    <form class="ui form mem" data-for="add-membership" method="post" action="db.php">
+                    <form class="ui form mem" data-for="add-membership" method="post" action="add-mem">
                       <input type="hidden" name="request" value="add-membership">
+                      {{ csrf_field() }}
                         <div class="field">
                         <label>Association Name</label>
-                        <input type="text" name="membership[assoc]" maxlength="100">
+                        <input type="text" name="assoc" maxlength="100">
                       </div>
                      
                       <div class="two fields">
@@ -1101,13 +1079,13 @@
                             <!--<input type="text" name="school[from]">-->
                             
                             <div class="ui fluid search selection dropdown" id="mem-from-add">
-                              <input type="hidden" name="membership[from]">
+                              <input type="hidden" name="from">
                               <i class="dropdown icon"></i>
                               <div class="default text">Year entered</i></div>
                               <div class="menu">
-                                <?php //for($i=1980; $i<=date("Y"); $i++){ ?>
-                                    <div class="item" data-value="<?php //echo $i; ?>"><?php //echo $i; ?></div>
-                                <?php //} ?>
+                                <?php for($i=1980; $i<=date("Y"); $i++){ ?>
+                                    <div class="item" data-value="<?php echo $i; ?>"><?php echo $i; ?></div>
+                                <?php } ?>
                               </div>
                             </div>
                           </div>
@@ -1117,13 +1095,13 @@
                             <!--<input type="text" name="school[from]">-->
                             
                             <div class="ui fluid search selection dropdown" id="mem-to-add">
-                              <input type="hidden" name="membership[to]">
+                              <input type="hidden" name="to">
                               <i class="dropdown icon"></i>
                               <div class="default text">Year ended</i></div>
                               <div class="menu">
-                                <?php //for($i=1980; $i<=date("Y"); $i++){ ?>
-                                    <div class="item" data-value="<?php //echo $i; ?>"><?php // echo $i; ?></div>
-                                <?php // } ?>
+                                <?php for($i=1980; $i<=date("Y"); $i++){ ?>
+                                    <div class="item" data-value="<?php echo $i; ?>"><?php  echo $i; ?></div>
+                                <?php } ?>
                               </div>
                             </div>
                           </div>
@@ -1132,8 +1110,9 @@
                           
                           <div class="field">
                         <label>Description</label>
-                        <textarea rows="2" name="membership[des]" maxlength="255"></textarea>
+                        <textarea rows="2" name="des" maxlength="255"></textarea>
                       </div> 
+                      <input type="hidden" name="user_id" value="{{$user->id}}">
                       <button class="ui green button" type="submit" style="float: right;">Add</button>
                       <button class="ui blue button" type="button" id="cancel_add_mem">Cancel</button>
                     </form>
@@ -1144,11 +1123,12 @@
                 <div class="ui modal" data-for="add-achievement">
                   <div class="header">Add Achievement</div>
                   <div class="content">
-                    <form class="ui form ach" data-for="add-achievement" method="post" action="db.php">
+                    <form class="ui form ach" data-for="add-achievement" method="post" action="add-achieve">
                       <input type="hidden" name="request" value="add-achievement">
+                      {{ csrf_field() }}
                       <div class="field">
                         <label>Achievement Name</label>
-                        <input type="text" name="achievement[title]" maxlength="70">
+                        <input type="text" name="title" maxlength="70">
                       </div>
                       
                       <div class="field">
@@ -1156,21 +1136,22 @@
                         <!--<input type="text" name="school[from]">-->
                         
                         <div class="ui fluid search selection dropdown">
-                          <input type="hidden" name="achievement[year]">
+                          <input type="hidden" name="year">
                           <i class="dropdown icon"></i>
                           <div class="default text">Year entered</i></div>
                           <div class="menu">
-                            <?php //for($i=1980; $i<=date("Y"); $i++){ ?>
-                                <div class="item" data-value="<?php //echo $i; ?>"><?php //echo $i; ?></div>
-                            <?php //} ?>
+                            <?php for($i=1980; $i<=date("Y"); $i++){ ?>
+                                <div class="item" data-value="<?php echo $i; ?>"><?php echo $i; ?></div>
+                            <?php } ?>
                           </div>
                         </div>
                       </div>
                   
                       <div class="field">
                         <label>Description</label>
-                        <textarea rows="2" name="achievement[des]" maxlength="255"></textarea>
+                        <textarea rows="2" name="des" maxlength="255"></textarea>
                       </div> 
+                      <input type="hidden" name="user_id" value="{{$user->id}}">
                       <button class="ui green button" type="submit" style="float: right;">Add</button>
                       <button class="ui blue button" type="button" id="cancel_add_ach">Cancel</button>
                     </form>
@@ -1183,31 +1164,29 @@
                 <div class="ui modal" data-for="add-skill">
                   <div class="header">Add Skills</div>
                   <div class="content">
-                    <form class="ui form" id="add-skill" data-for="add-skill" method="post" action="db.php">
+                    <form class="ui form" id="add-skill" data-for="add-skill" method="post" action="add-skill">
+                    {{ csrf_field() }}
                       <input type="hidden" name="request" value="add-skill">
-                      <input type="hidden" id="skill_percent" name="skill[percent]" value="0">
+                      <input type="hidden" id="skill_percent" name="percent" value="0">
                       <div class="field">
-                        <input type="text" name="skill[name]" id="myInput" onkeyup="myFunction()" placeholder="Search for skills..">
+                        <input type="text" name="name" id="myInput" onkeyup="myFunction()" placeholder="Search for skills..">
                           <ul id="myUL">
-                               <?php
-                                /*$result1 = $db->get_skill_list();
-                                     foreach($result1 as $row1):
-                                         echo "<li><a value=".$row1[0]." class='op' href='#'>".$row1[1]."</a></li>";
-                                
-                                     endforeach;*/
-                            ?>
+                            @foreach($skills as $skill)
+                                <li><a value="{{$skill->id}}" class="op" href="#">{{$skill->name}}</a></li>
+                            @endforeach
                           </ul>
                       </div>
+                      <input type="hidden" name="user_id" value="{{$user->id}}">
                         <button class ="ui green button" type="button" id="add-diff-skill" style="float: right;">Add Different Skill</button>
                         <button class="ui blue button" type="button" id="cancel_add_skill">Cancel</button>
                       <!--<button class="ui green button" type="submit">Submit</button>
                       -->
                     </form>
                       
-                      <form class="ui form" id="update-skill" method="post" action="db.php">
+                      <form class="ui form" id="update-skill" method="post" action="edit-skill">
                       <input type="hidden" name="request" value="update-skill">
-                      <input type="hidden" id="skill_percent_edit" name="skill_ed[percent]" value="0">
-                      <input type="hidden" id="skill_id" name="skill_ed[id]" value="0">
+                      <input type="hidden" id="skill_percent_edit" name="percent" value="0">
+                      <input type="hidden" id="skill_id" name="id" value="0">
                       <!--<button class="ui green button" type="submit">Submit</button>
                       <button class="ui red button" type="button">Cancel</button>-->
                     </form>
@@ -1219,6 +1198,107 @@
                       <button class="ui red button" type="button">Cancel</button>-->
                     </form>
                       
+                  </div>
+                </div>
+                 <!-- pop-up window for editing skill -->
+                <div class="ui modal" data-for="edit-skill">
+                  <div class="header">Edit Skill</div>
+                  <div class="content">
+                    <form class="ui form" method="post" action="edit-skill">
+                      <input type="hidden" name="request" value="edit-skill">
+                      <input type="hidden" name="no" data-name="no">
+                      <div class="field">
+                        <input type="text" name="name" data-name="s-name" maxlength="50">
+                          <input type="range" id="skill_rate_edit" name="rate" oninput="change_skill_rate(this.value, 'currentValue_edit')" value="0" min="0" max="100" step="1" style="width: 88%;" />&nbsp;&nbsp;
+                    <span id="currentValue_edit" style="width: 12%; font-size: 30px; text-alignment: center;"><strong>0%</strong></span>
+                      </div> 
+                      <button class="ui red button" type="button" id="modal-del-skill">Delete</button>
+                      <button class="ui green button" type="submit" style="float: right;">Save</button>
+                      <button class="ui blue button" type="button" style="float: right;" id="cancel_edit_skill">Cancel</button>
+                    </form>
+                  </div>
+                </div>
+                
+                
+                      <div class="ui modal" data-for="add-diff-skill">
+                      <div class="header">Add Skill</div>
+                      <div class="content">
+                        <form class="ui form" method="post" action="add-skill">
+                        {{ csrf_field() }}
+                          <input type="hidden" name="request" value="add-skill">
+                          <div class="field">
+                            <input type="text" name="name" id="new_skill" placeholder="Skill name" maxlength="50">
+                              <input type="range" name="percent" id="new_rate" onchange="change_skill_rate(this.value, 'currentValue_add')" oninput="change_skill_rate(this.value, 'currentValue_add')" value="0" min="0" max="100" step="1" style="width: 88%;" />&nbsp;&nbsp;
+                        <span id="currentValue_add" style="width: 12%; font-size: 30px; text-alignment: center;"><strong>0%</strong></span>
+                          </div>
+                          <input type="hidden" name="user_id" value="{{$user->id}}">
+                          <button class="ui green button" type="submit" style="float: right;">Add</button>
+                          <button class="ui blue button" type="button" id="cancel_add_diff_skill">Cancel</button>
+                        </form>
+                      </div>
+                    </div>
+                <!-- pop-up window for delete confirmation -->
+
+                <!-- nothing yet, will add later -->
+                <!-- pop-up window for adding link -->
+                <div class="ui small modal" data-for="add-link">
+                  <div class="header">Add link</div>
+                  <div class="content">
+                     <form class="ui form link" method="post" action="add-link" data-for="add-link">
+                      <input type="hidden" name="request" value="add-link">
+                      {{ csrf_field() }}
+                      <div class="two fields">
+                          <div class="field">
+                          <div class="ui fluid search selection dropdown" id="select-web">
+                          <input type="hidden" name="web">
+                          <i class="dropdown icon"></i>
+                          <div class="default text">Select Website</i></div>
+                          <div class="menu">
+                            <div class="item" data-value="facebook"><i class="facebook icon"></i>Facebook</div>
+                            <div class="item" data-value="twitter"><i class="twitter icon"></i>Twitter</div>
+                            <div class="item" data-value="linkedin"><i class="linkedin icon"></i>LinkedIn</div>
+                            <div class="item" data-value="instagram"><i class="instagram icon"></i>Instagram</div>
+                            <div class="item" data-value="pinterest"><i class="pinterest icon"></i>Pinterest</div>
+                            <div class="item" data-value="tumblr"><i class="tumblr icon"></i>Tumblr</div>
+                            <div class="item" data-value="youtube"><i class="youtube icon"></i>Youtube</div>
+                            <div class="item" data-value="skype"><i class="skype icon"></i>Skype</div>
+                            <div class="item" data-value="snapchat"><i class="snapchat icon"></i>Snapchat</div>
+                          </div>
+                        </div>
+                        </div>
+                            <div class="field">
+                          <input type="text" name="url" placeholder="juandelacruz" maxlength="30">
+                          </div>
+                          <input type="hidden" name="user_id" value="{{$user->id}}">
+                          <input type="submit" style="display: none;" id="add-link-submit">
+                      </div>
+                     </form>
+                  </div>
+                  <div class="actions">
+                    <div class="ui green button" data-submit="add-link-submit">Add</div>
+                    <div class="ui blue button" style="float: left;"id="cancel_add_link">Cancel</div>
+                  </div>
+                </div>
+                <!-- pop-up window for setting info -->
+                <div class="ui small modal" data-for="add-about-me">
+                  <div class="header">About Me</div>
+                  <div class="content">
+                     <form class="ui form abt" method="post" action="db.php" data-for="add-about-me">
+                      <input type="hidden" name="request" value="add-about-me">
+                         <div class="field">
+                             <label>URL</label>
+                             <input type="text" name="url" value="<?php //echo $user::get_info(6); ?>" maxlength="30">
+                      </div>
+                         <div class="field">
+                        <label>Introduction</label>
+                             <textarea name="intro" placeholder = "Tell something about yourself" maxlength="140" style="resize: none;"><?php //echo $user::get_info(11); ?></textarea>
+                      </div>
+                         <button style="display: none;" id="submit-about-me"></button>
+                     </form>
+                  </div>
+                  <div class="actions">
+                    <div class="ui green button" id="check-about-me"><?php //echo (strlen($user::get_info(11)) > 0 ? "Save" : "Add"); ?></div>
+                    <div class="ui blue cancel button">Cancel</div>
                   </div>
                 </div>
                       </div>
@@ -1794,7 +1874,7 @@
             }
             
             function openWin1() {
-                window.open("Resumes/Classic%202/index.php");
+                window.open("Classic");
             }
             
             function openWin2() {
@@ -2237,6 +2317,7 @@
                 $("#cancel_add_diff_skill").on("click", function(){ $("div[data-for='add-diff-skill']").modal("hide"); });
                 $("#cancel_add_mem").on("click", function(){ $("div[data-for='add-membership']").modal("hide"); });
                 $("#cancel_add_ach").on("click", function(){ $("div[data-for='add-achievement']").modal("hide"); });
+                $("#cancel_add_link").on("click", function(){ $("div[data-for='add-link']").modal("hide"); });
                 
                 $("#add-diff-skill").on("click", function(){
                     $("div[data-for='add-skill']").modal("hide");

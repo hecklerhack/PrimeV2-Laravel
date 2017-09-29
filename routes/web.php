@@ -22,4 +22,12 @@ Route::get('/dashboard', 'HomeController@index');
 Route::resource('posts', 'PostsController');
 Route::post('add-educ', 'EducController@store');
 Route::post('add-work', 'WorkController@store');
+Route::post('add-mem', 'MembershipController@store');
+Route::post('add-achieve', 'AchievementController@store');
+Route::post('add-skill', 'SkillController@store');
+Route::post('add-link', 'LinkController@store');
+
+Route::get('/Classic', function(){
+    return view('Resumes/Classic 2/index');
+});
 Auth::routes();

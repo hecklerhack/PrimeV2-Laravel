@@ -4,10 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Candidate_Skill extends Model
+class Skills extends Model
 {
     //
-    protected $table = 'tbl_skills';
-    protected $primaryKey = 'id';
+    public $table = 'skills';
+    public $primaryKey = 'id';
     public $timestamps = false;
 }
