@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 28, 2017 at 05:35 AM
+-- Generation Time: Oct 05, 2017 at 05:04 AM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 5.6.30
 
@@ -28,6 +28,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `candidate` (
   `candidate_id` int(10) UNSIGNED NOT NULL,
+  `dp_link` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
   `first_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `last_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `mobile_no` bigint(11) NOT NULL,
@@ -43,42 +44,21 @@ CREATE TABLE `candidate` (
 -- Dumping data for table `candidate`
 --
 
-INSERT INTO `candidate` (`candidate_id`, `first_name`, `last_name`, `mobile_no`, `tel_no`, `location`, `expected_salary`, `position`, `educ_attain`, `user_id`) VALUES
-(5, 'Trish', 'Moreno', 9298473811, 7843812, '1', 200000, 'Manager', '1', 8),
-(6, 'trish', 'moreno', 9873492819, 7777777, '1', 20000, 'Manager', '3', 9),
-(7, 'trish', 'moreno', 9999999999, 7777777, '1', 2000000, 'Manager', '1', 10),
-(8, 'tres', 'moreno', 9999999999, 7777777, '1', 200000, 'Project Manager', '1', 11),
-(9, 'tres', 'moreno', 9999999999, 7777777, '1', 2000000, 'Project Manager', '1', 12),
-(10, 'tres', 'moreno', 9999999999, 7777777, '1', 2000000, 'Manager', '1', 13),
-(11, 'tres', 'moreno', 9999999999, 7777777, '1', 2000000, 'Project Manager', '1', 14),
-(12, 'tres', 'moreno', 9999999999, 7777777, 'Manila, Metro Manila', 2222222, 'Manager', 'Bachelor\'s Degree', 15),
-(13, 'Trish', 'Moreno', 9999999999, 8888888, '1', 200000, 'Manager', '4', 16),
-(14, 'Trish', 'Moreno', 9999999999, 8888888, '1', 200000, 'Manager', '4', 18),
-(15, 'Trish', 'Moreno', 9999999999, 8888888, '1', 200000, 'Manager', '4', 19),
-(16, 'Trish', 'Moreno', 9999999999, 8888888, '1', 200000, 'Manager', '4', 20),
-(17, 'meh', 'mehhh', 9999999999, 8888888, 'Manila, Metro Manila', 50000, 'Senior Developer', 'Bachelor\'s Degree', 23),
-(18, 'Trish', 'Moreno', 3333333333, 7878787, 'Manila,Metro Manila', 5000000, 'Senior Developer', 'Undergraduate', 28);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `candidate_achieve`
---
-
-CREATE TABLE `candidate_achieve` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `title` varchar(30) NOT NULL,
-  `description` varchar(30) NOT NULL,
-  `year` year(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `candidate_achieve`
---
-
-INSERT INTO `candidate_achieve` (`id`, `user_id`, `title`, `description`, `year`) VALUES
-(1, 28, 'Awesomeness Award', 'Because I\'m awesome.', 2017);
+INSERT INTO `candidate` (`candidate_id`, `dp_link`, `first_name`, `last_name`, `mobile_no`, `tel_no`, `location`, `expected_salary`, `position`, `educ_attain`, `user_id`) VALUES
+(5, '', 'Trish', 'Moreno', 9298473811, 7843812, '1', 200000, 'Manager', '1', 8),
+(6, '', 'trish', 'moreno', 9873492819, 7777777, '1', 20000, 'Manager', '3', 9),
+(7, '', 'trish', 'moreno', 9999999999, 7777777, '1', 2000000, 'Manager', '1', 10),
+(8, '', 'tres', 'moreno', 9999999999, 7777777, '1', 200000, 'Project Manager', '1', 11),
+(9, '', 'tres', 'moreno', 9999999999, 7777777, '1', 2000000, 'Project Manager', '1', 12),
+(10, '', 'tres', 'moreno', 9999999999, 7777777, '1', 2000000, 'Manager', '1', 13),
+(11, '', 'tres', 'moreno', 9999999999, 7777777, '1', 2000000, 'Project Manager', '1', 14),
+(12, '', 'tres', 'moreno', 9999999999, 7777777, 'Manila, Metro Manila', 2222222, 'Manager', 'Bachelor\'s Degree', 15),
+(13, '', 'Trish', 'Moreno', 9999999999, 8888888, '1', 200000, 'Manager', '4', 16),
+(14, '', 'Trish', 'Moreno', 9999999999, 8888888, '1', 200000, 'Manager', '4', 18),
+(15, '', 'Trish', 'Moreno', 9999999999, 8888888, '1', 200000, 'Manager', '4', 19),
+(16, '', 'Trish', 'Moreno', 9999999999, 8888888, '1', 200000, 'Manager', '4', 20),
+(17, '', 'meh', 'mehhh', 9999999999, 8888888, 'Manila, Metro Manila', 50000, 'Senior Developer', 'Bachelor\'s Degree', 23),
+(18, 'user.png', 'Trish', 'Moreno', 3333333333, 7878787, 'Manila,Metro Manila', 5000000, 'Senior Developer', 'Undergraduate', 28);
 
 -- --------------------------------------------------------
 
@@ -106,7 +86,7 @@ CREATE TABLE `candidate_educ` (
 --
 
 INSERT INTO `candidate_educ` (`id`, `user_id`, `level`, `school`, `location`, `degree`, `notes`, `year_entered`, `year_ended`, `show_resume_1`, `show_resume_2`, `show_resume_3`) VALUES
-(1, 28, 3, 'University of Santo Tomas', 'Manila, Metro Manila', 'BS Computer Science', NULL, 2014, 2017, 0, 0, 0),
+(1, 28, 3, 'University of Santo Tomas', 'Manila, Metro Manila', 'BS Computer Science', NULL, 2014, 2017, 1, 0, 0),
 (7, 28, 4, 'nyahaha', 'Manila,Metro Manila', 'kyah', NULL, 2006, 2007, 1, 1, 1),
 (8, 28, 4, 'University of Santo Tomas', 'Manila,Metro Manila', 'MS Computer Science', NULL, 2014, 2017, 1, 1, 1);
 
@@ -140,50 +120,8 @@ CREATE TABLE `candidate_exp` (
 
 INSERT INTO `candidate_exp` (`id`, `user_id`, `job_title`, `position`, `location`, `company`, `description`, `year_entered`, `year_ended`, `industry`, `field_of_study`, `job_level`, `show_resume_1`, `show_resume_2`, `show_resume_3`) VALUES
 (1, 28, '2', 'Senior Developer', 'Manila, Metro Manila', 'Stratworth Solutions Inc.', 'cool', '2010', '2012', '', '', 5, 0, 0, 0),
-(2, 28, NULL, 'Project Manager', 'Pasig, Metro Manila', 'mehh', 'nyeh', '2012', '2014', '18', '2', NULL, 0, 0, 0),
-(3, 28, NULL, 'Manager', 'Pasig, Metro Manila', 'Tristan\'s Lair', 'awesome', '2013-09-12', '2014-09-12', '17', '5', NULL, 0, 0, 0);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `candidate_member`
---
-
-CREATE TABLE `candidate_member` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `assoc` varchar(30) NOT NULL,
-  `description` varchar(40) NOT NULL,
-  `date_entered` year(4) NOT NULL,
-  `date_ended` year(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `candidate_member`
---
-
-INSERT INTO `candidate_member` (`id`, `user_id`, `assoc`, `description`, `date_entered`, `date_ended`) VALUES
-(1, 28, 'FSociety', 'We are fsociety.', 2011, 2017);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `candidate_skills`
---
-
-CREATE TABLE `candidate_skills` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `skills` varchar(30) NOT NULL,
-  `percent` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `candidate_skills`
---
-
-INSERT INTO `candidate_skills` (`id`, `user_id`, `skills`, `percent`) VALUES
-(1, 28, 'C++', 90);
+(2, 28, NULL, 'Project Manager', 'Pasig, Metro Manila', 'mehh', 'nyeh', '2012', '2014', '18', '2', NULL, 0, 1, 0),
+(3, 28, NULL, 'Manager', 'Pasig, Metro Manila', 'Tristan\'s Lair', 'awesome', '2013-09-12', '2014-09-12', '17', '5', NULL, 1, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -316,16 +254,63 @@ CREATE TABLE `resume` (
   `intro` varchar(60) NOT NULL,
   `url` varchar(40) NOT NULL,
   `public_url` varchar(30) NOT NULL,
-  `educ_attain` varchar(30) NOT NULL
+  `educ_attain` varchar(30) NOT NULL,
+  `last_resume_update` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `resume`
 --
 
-INSERT INTO `resume` (`resume_id`, `candidate_id`, `resume_1`, `resume_2`, `resume_3`, `current_position`, `intro`, `url`, `public_url`, `educ_attain`) VALUES
-(1, 17, 'Resume 1', 'Resume 2', 'Resume 3', 'Senior Developer', 'yoooo it\'s meh', '/meh', 'www.mehs-corner.com', '4'),
-(2, 18, 'Resume 1', 'Resume 2', 'Resume 3', 'Senior Developer', 'It\'s Trish yoo', '/trish', '/trish', 'Undergraduate');
+INSERT INTO `resume` (`resume_id`, `candidate_id`, `resume_1`, `resume_2`, `resume_3`, `current_position`, `intro`, `url`, `public_url`, `educ_attain`, `last_resume_update`) VALUES
+(1, 17, 'Resume 1', 'Resume 2', 'Resume 3', 'Senior Developer', 'yoooo it\'s meh', '/meh', 'www.mehs-corner.com', '4', '0000-00-00'),
+(2, 18, 'Resume 1', 'Resume 2', 'Resume 3', 'Senior Developer', '*some random stuff about me*', 'trish', '', 'Undergraduate', '2017-09-21');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `skills`
+--
+
+CREATE TABLE `skills` (
+  `id` int(11) NOT NULL,
+  `name` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `skills`
+--
+
+INSERT INTO `skills` (`id`, `name`) VALUES
+(1, 'Java'),
+(2, 'MS Office'),
+(3, 'PHP'),
+(4, 'C++'),
+(5, 'Project Management');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_achievements`
+--
+
+CREATE TABLE `tbl_achievements` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `title` varchar(30) NOT NULL,
+  `description` varchar(30) NOT NULL,
+  `year` year(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
+
+--
+-- Dumping data for table `tbl_achievements`
+--
+
+INSERT INTO `tbl_achievements` (`id`, `user_id`, `title`, `description`, `year`) VALUES
+(1, 28, 'Awesomeness Award', 'Because I\'m awesome.', 2017),
+(2, 28, 'Inner Peace', 'Because we all need it.', 2017),
+(3, 28, 'The Enlightenment', 'I have been enlightened', 2016),
+(4, 28, 'Nirvana', 'I have achieved Nirvana.', 2015);
 
 -- --------------------------------------------------------
 
@@ -445,6 +430,58 @@ INSERT INTO `tbl_location` (`id`, `city`, `province`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tbl_membership`
+--
+
+CREATE TABLE `tbl_membership` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `assoc` varchar(30) NOT NULL,
+  `description` varchar(50) NOT NULL,
+  `date_entered` year(4) NOT NULL,
+  `date_ended` year(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbl_membership`
+--
+
+INSERT INTO `tbl_membership` (`id`, `user_id`, `assoc`, `description`, `date_entered`, `date_ended`) VALUES
+(1, 28, 'Fsociety', 'We aree fsociety.', 2014, 2017),
+(2, 28, 'The Dark Army', 'We work in secret.', 2015, 2016),
+(3, 28, 'Anonymous', 'We are anonymous.', 2012, 2015),
+(4, 28, 'Green Day', 'I walk alone.', 2010, 2012),
+(5, 28, 'My Chemical Romance', 'Welcome to the black parade.', 2004, 2005),
+(6, 28, 'Linkin Park', 'I\'ve tried so hard, and got so far.', 2002, 2017),
+(7, 28, 'Guns n\' Roses', 'Welcome to the jungle. We got fun & games.', 2005, 2006),
+(8, 28, 'Led Zeppelin', 'Valhalla, I am coming.', 1980, 1997);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_skills`
+--
+
+CREATE TABLE `tbl_skills` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `skills` varchar(30) NOT NULL,
+  `percent` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
+
+--
+-- Dumping data for table `tbl_skills`
+--
+
+INSERT INTO `tbl_skills` (`id`, `user_id`, `skills`, `percent`) VALUES
+(1, 28, 'C++', 90),
+(2, 28, 'Project Management', 68),
+(3, 28, 'Java', 47),
+(4, 28, 'Marketing', 81);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -490,7 +527,9 @@ CREATE TABLE `users_links` (
 --
 
 INSERT INTO `users_links` (`no`, `user_id`, `website`, `link`) VALUES
-(1, 23, 'facebook', 'meh');
+(1, 23, 'facebook', 'meh'),
+(2, 28, 'facebook', 'facebook.com/trish'),
+(3, 28, 'twitter', 'twitter.com/trishmoreno');
 
 --
 -- Indexes for dumped tables
@@ -507,12 +546,6 @@ ALTER TABLE `candidate`
   ADD KEY `educ_attain` (`educ_attain`);
 
 --
--- Indexes for table `candidate_achieve`
---
-ALTER TABLE `candidate_achieve`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `candidate_educ`
 --
 ALTER TABLE `candidate_educ`
@@ -523,18 +556,6 @@ ALTER TABLE `candidate_educ`
 -- Indexes for table `candidate_exp`
 --
 ALTER TABLE `candidate_exp`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `candidate_member`
---
-ALTER TABLE `candidate_member`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `candidate_skills`
---
-ALTER TABLE `candidate_skills`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -580,6 +601,18 @@ ALTER TABLE `resume`
   ADD PRIMARY KEY (`resume_id`);
 
 --
+-- Indexes for table `skills`
+--
+ALTER TABLE `skills`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_achievements`
+--
+ALTER TABLE `tbl_achievements`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `tbl_city`
 --
 ALTER TABLE `tbl_city`
@@ -595,6 +628,18 @@ ALTER TABLE `tbl_industry`
 -- Indexes for table `tbl_location`
 --
 ALTER TABLE `tbl_location`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_membership`
+--
+ALTER TABLE `tbl_membership`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_skills`
+--
+ALTER TABLE `tbl_skills`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -620,11 +665,6 @@ ALTER TABLE `users_links`
 ALTER TABLE `candidate`
   MODIFY `candidate_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 --
--- AUTO_INCREMENT for table `candidate_achieve`
---
-ALTER TABLE `candidate_achieve`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
---
 -- AUTO_INCREMENT for table `candidate_educ`
 --
 ALTER TABLE `candidate_educ`
@@ -634,16 +674,6 @@ ALTER TABLE `candidate_educ`
 --
 ALTER TABLE `candidate_exp`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
---
--- AUTO_INCREMENT for table `candidate_member`
---
-ALTER TABLE `candidate_member`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT for table `candidate_skills`
---
-ALTER TABLE `candidate_skills`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `educ_attainment`
 --
@@ -675,6 +705,16 @@ ALTER TABLE `posts`
 ALTER TABLE `resume`
   MODIFY `resume_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
+-- AUTO_INCREMENT for table `skills`
+--
+ALTER TABLE `skills`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT for table `tbl_achievements`
+--
+ALTER TABLE `tbl_achievements`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+--
 -- AUTO_INCREMENT for table `tbl_city`
 --
 ALTER TABLE `tbl_city`
@@ -690,6 +730,16 @@ ALTER TABLE `tbl_industry`
 ALTER TABLE `tbl_location`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
+-- AUTO_INCREMENT for table `tbl_membership`
+--
+ALTER TABLE `tbl_membership`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+--
+-- AUTO_INCREMENT for table `tbl_skills`
+--
+ALTER TABLE `tbl_skills`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
@@ -698,7 +748,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `users_links`
 --
 ALTER TABLE `users_links`
-  MODIFY `no` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `no` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

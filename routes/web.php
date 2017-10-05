@@ -26,8 +26,8 @@ Route::post('add-mem', 'MembershipController@store');
 Route::post('add-achieve', 'AchievementController@store');
 Route::post('add-skill', 'SkillController@store');
 Route::post('add-link', 'LinkController@store');
+Route::post('add-about-me', 'ResumeController@addAboutMe');
 
-Route::get('/Classic', function(){
-    return view('Resumes/Classic 2/index');
-});
+Route::get('/Classic/{url}', 'ResumeController@viewResume1');
+Route::get('/Creative/{url}', 'ResumeController@viewResume2');
 Auth::routes();

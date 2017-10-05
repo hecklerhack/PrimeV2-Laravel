@@ -180,10 +180,10 @@
                     <div class="ui segment">
                         <div id="display_pic_div">
                         <?php
-                            $directory = "uploads/";
+                            $directory = "candidates/images/";
                             $images = glob($directory . "*.{jpg,png,jpeg}", GLOB_BRACE);
                             $chk = false;
-                          /*  foreach($images as $image){
+                            foreach($images as $image){
                                 $temp = explode("/", $image);
                                 $temp_2 = explode(".", $temp[1]);
                                 if($temp_2[0] == $user->id){ 
@@ -191,7 +191,7 @@
                                     echo '<img id="display_pic" class="ui circular image" src="{{asset('.$image.')}}"/>';
                                     break;
                                 }
-                            } save this for laters */
+                            }
                         ?>
                             @if(!$chk)
                                  <img id='display_pic' class='ui circular image' src="{{asset('candidates/images/default.jpg')}}"> 
@@ -258,7 +258,7 @@
                                 <div class="ui positive message">
                                     <i class="close icon"></i>
                                       <div class="header">{{session('header')}}</div>
-                                      <p><?php //echo $_SESSION["abt"]["msg"]; ?></p>
+                                      <p>{{session('msg')}}</p>
                                     </div>
                                    <?php Session::forget('abt'); ?>
                                 </div>
@@ -816,7 +816,8 @@
                         
                         @if($chk_educ && $chk_work && $chk_ach && $chk_mem && $chk_skill && $chk_abt)
                           <i class="toggle on icon" onclick="openWin1()" title="Edit Visibility of Resume 1"></i>
-                          <a href="{{'/Classic?u='.$resume->url}}" target="_blank" style="color: black;"><i class="chevron circle right icon" title="Public View Resume 1"></i></a>
+                          <a href="{{'/Classic/'.$resume->url}}" target="_blank" style="color: black;"><i class="chevron circle right icon" title="Public View Resume 1"></i></a>
+                          
                          @endif
                         </center>
                     </div>
@@ -841,7 +842,7 @@
                         <i class="record icon" title="View videos"></i>
                           <?php if($chk_educ && $chk_work && $chk_ach && $chk_mem && $chk_skill && $chk_abt){ ?>
                           <i class="toggle on icon" onclick="openWin2()" title="Edit Visibility of Resume 2"></i>
-                          <a href="{{'Resumes/Creative2/creative.php?u='.$resume->url}}" target="_blank" style="color: black;"><i class="chevron circle right icon" title="Public View Resume 2"></i></a>
+                          <a href="{{'/Creative/'.$resume->url}}" target="_blank" style="color: black;"><i class="chevron circle right icon" title="Public View Resume 2"></i></a>
                           <?php } ?>
                         </center>
                     </div>
@@ -1283,24 +1284,27 @@
                 <div class="ui small modal" data-for="add-about-me">
                   <div class="header">About Me</div>
                   <div class="content">
-                     <form class="ui form abt" method="post" action="db.php" data-for="add-about-me">
+                     <form class="ui form abt" method="post" action="add-about-me" data-for="add-about-me">
                       <input type="hidden" name="request" value="add-about-me">
+                        {{ csrf_field() }}
                          <div class="field">
                              <label>URL</label>
-                             <input type="text" name="url" value="<?php //echo $user::get_info(6); ?>" maxlength="30">
-                      </div>
+                             <input type="text" name="url" value="{{$resume->url}}" maxlength="30">
+                        </div>
                          <div class="field">
                         <label>Introduction</label>
-                             <textarea name="intro" placeholder = "Tell something about yourself" maxlength="140" style="resize: none;"><?php //echo $user::get_info(11); ?></textarea>
+                             <textarea name="intro" placeholder = "Tell something about yourself" maxlength="140" style="resize: none;">{{$resume->intro}}</textarea>
                       </div>
                          <button style="display: none;" id="submit-about-me"></button>
+                         <input type="hidden" name="candidate_id" value="{{$candidate->candidate_id}}">
                      </form>
                   </div>
                   <div class="actions">
-                    <div class="ui green button" id="check-about-me"><?php //echo (strlen($user::get_info(11)) > 0 ? "Save" : "Add"); ?></div>
+                    <div class="ui green button" id="check-about-me"><?php echo (strlen($resume->intro) > 0 ? "Save" : "Add"); ?></div>
                     <div class="ui blue cancel button">Cancel</div>
                   </div>
                 </div>
+                <!--modal ends here-->
                       </div>
                     </div>
         <script src="{{asset('js/jquery.js')}}"></script>
@@ -1878,7 +1882,7 @@
             }
             
             function openWin2() {
-                window.open("Resumes/Creative2/creative.php");
+                window.open("Creative");
             }
             
             function openWin3() {

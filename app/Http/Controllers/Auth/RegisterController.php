@@ -76,6 +76,7 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         $candidate = new Candidate;
+        $candidate->dp_link = "";
        $candidate->first_name = $request->input('first-name');
        $candidate->last_name = $request->input('last-name');
        $candidate->mobile_no = $request->input('contact');
@@ -113,6 +114,7 @@ class RegisterController extends Controller
        $resume->url = '';
        $resume->public_url = '';
        $resume->current_position = $candidate->position;
+       $resume->last_resume_update = date("Y/m/d");
        $resume->save();
        
    /*    $links = new Links;
